@@ -7,13 +7,39 @@
 コマンド：nest new プロジェクト名
 ※npmを選択
 
+③プロジェクト直下にenv.jsonを作成
+{
+    "PROTOCOL": "http://",
+    "DOMAIN": "localhost:",
+    "PORT": 3001,
+    "CORS":{
+        "PROTOCOL": "http://",
+        "DOMAIN": "localhost:",
+        "PORT": 5173
+    },
+    "COOKIE_KEY":"jwt",
+    "TIMEOUT":10000,
+    "DATABASE":{
+        "TYPE":"postgres",
+        "PROTOCOL": "http://",
+        "PORT": 5432,
+        "HOST":"localhost",
+        "USERNAME":"postgres",
+        "NAME":"postgres",
+        "SCHEMA":"bookmng"
+    }
+}
 
-③DB設定
+④プロジェクト直下に.envを作成
+BOOKMNG_JWT_KEY=任意の文字列を設定
+DATABASE_PASSWORD=DBの設定値を指定
+
+⑤DB設定
 ※Postgresql設定.txt参照
 
 
-④TypeORM導入
+⑥TypeORM導入
 ※TypeORMマイグレーション手順.txt
 
 
-⑤npm startでアプリを起動する
+⑦npm startでアプリを起動する

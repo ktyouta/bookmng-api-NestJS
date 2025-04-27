@@ -13,32 +13,50 @@ export class TestConnection extends BaseEntity {
 
 ②app.module.tsに以下の内容を追記
 
-imports: [
+  imports: [
     // DB設定
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'root',
-      database: 'postgres',
-      schema: 'bookmng',
+      host: ENV.DATABASE.HOST,
+      port: ENV.DATABASE.PORT,
+      username: ENV.DATABASE.USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: ENV.DATABASE.NAME,
+      schema: ENV.DATABASE.SCHEMA,
       entities: [TestConnection],
-      migrations: ["migrations/*.ts"],
+      migrations: ['src/migrations/*.ts'],
       synchronize: false,
     }),
   ],
 
 
-③package.jsonのscriptsに以下を追記
+③src直下にdatasource.tsを作成
+
+dotenv.config();
+
+export const AppDataSource = new DataSource({
+    type: 'postgres',
+    host: ENV.DATABASE.HOST,
+    port: ENV.DATABASE.PORT,
+    username: ENV.DATABASE.USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: ENV.DATABASE.NAME,
+    schema: ENV.DATABASE.SCHEMA,
+    entities: ["src/entities/*.ts"],
+    migrations: ["migrations/*.ts"],
+    synchronize: false,
+});
+
+
+④package.jsonのscriptsに以下を追記
 "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
 
 
-④以下のコマンドでマイグレーションを作成する
+⑤以下のコマンドでマイグレーションを作成する
 コマンド：npm run typeorm migration:generate -- --dataSource src/datasource.ts --pretty migrations/InitialSchema
 
 
-⑤以下のコマンドでマイグレーションを実行する
+⑥以下のコマンドでマイグレーションを実行する
 コマンド：npm run typeorm migration:run -- --dataSource src/datasource.ts 
 
 
