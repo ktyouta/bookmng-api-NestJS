@@ -1,0 +1,13 @@
+■Postgresql設定
+
+①以下の設定でDBを作成
+サーバー名：localhost
+データベース名：postgres
+ユーザーID：postgres
+パスワード：任意で設定
+
+
+
+
+
+

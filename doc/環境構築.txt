@@ -6,3 +6,14 @@
 ②プロジェクト作成
 コマンド：nest new プロジェクト名
 ※npmを選択
+
+
+③DB設定
+※Postgresql設定.txt参照
+
+
+④TypeORM導入
+※TypeORMマイグレーション手順.txt
+
+
+⑤npm startでアプリを起動する

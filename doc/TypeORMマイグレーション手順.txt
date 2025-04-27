@@ -1,0 +1,46 @@
+■TypeORMマイグレーション手順
+
+①src/entities/TestConnection.tsを作成
+TestConnection.tsの内容
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+
+@Entity()
+export class TestConnection extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id!: string;
+}
+
+
+②app.module.tsに以下の内容を追記
+
+imports: [
+    // DB設定
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'root',
+      database: 'postgres',
+      schema: 'bookmng',
+      entities: [TestConnection],
+      migrations: ["migrations/*.ts"],
+      synchronize: false,
+    }),
+  ],
+
+
+③package.jsonのscriptsに以下を追記
+"typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
+
+
+④以下のコマンドでマイグレーションを作成する
+コマンド：npm run typeorm migration:generate -- --dataSource src/datasource.ts --pretty migrations/InitialSchema
+
+
+⑤以下のコマンドでマイグレーションを実行する
+コマンド：npm run typeorm migration:run -- --dataSource src/datasource.ts 
+
+
+■参考サイト
+https://developer.mamezou-tech.com/blogs/2023/02/22/typeorm-migration-intro/
