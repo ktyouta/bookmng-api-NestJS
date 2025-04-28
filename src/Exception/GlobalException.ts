@@ -16,10 +16,17 @@ export class GlobalException implements ExceptionFilter {
         const message = exception.message;
         const status = GlobalException._HTTP_STATUS_ERROR;
 
+        const userAgent = request.headers['user-agent'];
+        const ip = request.ip;
+        const queryParams = JSON.stringify(request.query);
+        const requestBody = JSON.stringify(request.body);
+        // 出力内容
+        const output = `${request.method} ${request.originalUrl} | User-Agent: ${userAgent} | Query: ${queryParams} | Request Body: ${requestBody} | ip: ${ip} | ERROR: ${message}`;
+
         console.log(`Error occurred: ${message}`);
 
         // エラーログに出力
-        Logger.error(message);
+        Logger.error(output);
 
         response.status(status).json({
             statusCode: status,

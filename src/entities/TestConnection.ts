@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 
-@Entity('test_connection')
+@Entity({ name: 'test_connection', schema: 'bookmng' })
 export class TestConnection extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: string;

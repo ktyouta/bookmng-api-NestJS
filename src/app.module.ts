@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TestConnection } from './entities/TestConnection';
 import ENV from "../env.json";
 import * as dotenv from 'dotenv';
+import { AccessInterceptor } from './interceptor/AccessInterceptor';
+import { TestController } from './test/controller/test.controller';
+import { TestService } from './test/service/test.service';
 
 
 dotenv.config();
@@ -23,9 +26,19 @@ dotenv.config();
       entities: [TestConnection],
       migrations: ['src/migrations/*.ts'],
       synchronize: false,
+      logging: true,
     }),
+    TypeOrmModule.forFeature([TestConnection])
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    AppController,
+    // テスト用エンドポイント
+    TestController
+  ],
+  providers: [
+    AppService,
+    AccessInterceptor,
+    TestService,
+  ],
 })
 export class AppModule { }
