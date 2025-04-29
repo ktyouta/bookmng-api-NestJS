@@ -8,6 +8,8 @@ import * as dotenv from 'dotenv';
 import { AccessInterceptor } from './interceptor/AccessInterceptor';
 import { TestController } from './test/controller/test.controller';
 import { TestService } from './test/service/test.service';
+import { CONTROLLER_LIST } from './module/ControllerList';
+import { PROVIDER_LIST } from './module/ProviderList';
 
 
 dotenv.config();
@@ -30,15 +32,7 @@ dotenv.config();
     }),
     TypeOrmModule.forFeature([TestConnection])
   ],
-  controllers: [
-    AppController,
-    // テスト用エンドポイント
-    TestController
-  ],
-  providers: [
-    AppService,
-    AccessInterceptor,
-    TestService,
-  ],
+  controllers: CONTROLLER_LIST,
+  providers: PROVIDER_LIST,
 })
 export class AppModule { }

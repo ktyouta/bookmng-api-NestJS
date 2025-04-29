@@ -29,6 +29,15 @@ DIコンテナにそのServiceが登録されてるから取り出して、コ�
 
 
 
+②ファイル命名規則
+
+xxx.repository.ts	カスタムリポジトリ処理（DB操作のラップ）
+xxx.entity.ts	TypeORMやPrismaなどで使うDBエンティティ定義
+xxx.dto.ts	リクエスト/レスポンスのデータ構造定義
+xxx.guard.ts	アクセス制御（認可）用
+xxx.interceptor.ts	レスポンス加工/ログ記録用
+xxx.pipe.ts	バリデーション/変換用
+xxx.filter.ts	独自の例外ハンドリング
 
 
 

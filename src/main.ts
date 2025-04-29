@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import ENV from '../env.json';
-import { GlobalException } from './Exception/GlobalException';
+import { GlobalException } from './exception/GlobalException';
 import { AccessInterceptor } from './interceptor/AccessInterceptor';
 
 

@@ -1,0 +1,37 @@
+import { Controller, Get, Query, Req, UsePipes, ValidationPipe } from "@nestjs/common";
+import { ApiEndopoint, BOOKMNG_ENDPOINT_PATH } from "src/common/api/ApiEndpoint";
+import { GetBookListService } from "../service/getbooklist.service";
+import { GoogleBooksApiBookListKeyword } from "src/external/googlebooksapi/booklist/properties/GoogleBooksApiBookListKeyword";
+import { GetBookListResponseDto } from "../dto/GetBookListResponse.dto";
+import { HttpStatus } from "src/common/const/HttpStatusConst";
+import { GetBookListRequestDto } from "../dto/GetBookListReques.dto";
+
+
+
+@Controller(BOOKMNG_ENDPOINT_PATH)
+export class GetBookListController {
+
+    constructor(private readonly getBookListService: GetBookListService,) { }
+
+    @Get(ApiEndopoint.BOOK)
+    @UsePipes(new ValidationPipe({ whitelist: true }))
+    async execute(@Query() requestDto: GetBookListRequestDto) {
+
+        // キーワードを取得
+        const keyword = requestDto.q;
+        const googleBooksApiBookListKeyword = new GoogleBooksApiBookListKeyword(keyword);
+
+        // Google Books APIから書籍一覧を取得する
+        const bookListModel = await this.getBookListService.getBookList(googleBooksApiBookListKeyword);
+
+        // レスポンスの書籍一覧
+        const getBookListResponseDto = new GetBookListResponseDto(bookListModel);
+
+        return {
+            statusCode: HttpStatus.HTTP_STATUS_OK,
+            timestamp: new Date(),
+            message: 'success',
+            data: getBookListResponseDto.data
+        };
+    }
+}
