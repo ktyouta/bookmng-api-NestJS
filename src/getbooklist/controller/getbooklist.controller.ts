@@ -5,7 +5,7 @@ import { GoogleBooksApiBookListKeyword } from "src/external/googlebooksapi/bookl
 import { GetBookListResponseDto } from "../dto/GetBookListResponse.dto";
 import { HttpStatus } from "src/common/const/HttpStatusConst";
 import { GetBookListRequestDto } from "../dto/GetBookListReques.dto";
-
+import { ApiResponse } from "src/common/api/ApiResponse";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -27,11 +27,10 @@ export class GetBookListController {
         // レスポンスの書籍一覧
         const getBookListResponseDto = new GetBookListResponseDto(bookListModel);
 
-        return {
-            statusCode: HttpStatus.HTTP_STATUS_OK,
-            timestamp: new Date(),
-            message: 'success',
-            data: getBookListResponseDto.data
-        };
+        return ApiResponse.create(
+            HttpStatus.HTTP_STATUS_OK,
+            `書籍情報(一覧)の取得に成功しました`,
+            getBookListResponseDto.data
+        );
     }
 }

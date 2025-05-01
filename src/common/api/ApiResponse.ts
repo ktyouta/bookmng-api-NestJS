@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { HttpStatus } from '../const/HttpStatusConst';
 
 
 export class ApiResponse {
@@ -11,12 +12,13 @@ export class ApiResponse {
      * @param data 
      * @returns 
      */
-    public static create<T>(res: Response, status: number, message: string, data?: T) {
+    public static create<T>(status: HttpStatus, message: string, data?: T) {
 
-        return res.status(status).json({
-            status: status,
-            message: message,
-            data: data,
-        });
+        return {
+            statusCode: status,
+            timestamp: new Date(),
+            message,
+            data: data
+        };
     }
 }
