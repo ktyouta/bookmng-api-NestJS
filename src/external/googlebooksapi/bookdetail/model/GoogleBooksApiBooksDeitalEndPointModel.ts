@@ -15,7 +15,7 @@ export class GoogleBooksApiBooksDeitalEndPointModel {
 
     constructor(googleBooksApiBooksDeitalBookIdModel: GoogleBooksApiBooksDeitalBookIdModel,) {
 
-        this._url = `${GoogleBooksApiBooksDeitalEndPointModel.PATH}/${googleBooksApiBooksDeitalBookIdModel.id}}`
+        this._url = `${GoogleBooksApiBooksDeitalEndPointModel.PATH}/${googleBooksApiBooksDeitalBookIdModel.id}`
     }
 
     get url() {

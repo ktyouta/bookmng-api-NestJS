@@ -1,10 +1,10 @@
 import { Controller, Get, Query, Req, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiEndopoint, BOOKMNG_ENDPOINT_PATH } from "src/common/api/ApiEndpoint";
-import { GetBookListService } from "../service/getbooklist.service";
+import { GetBookListService } from "../service/get-book-list.service";
 import { GoogleBooksApiBookListKeyword } from "src/external/googlebooksapi/booklist/properties/GoogleBooksApiBookListKeyword";
-import { GetBookListResponseDto } from "../dto/GetBookListResponse.dto";
+import { GetBookListResponseDto } from "../dto/get-book-list-response.dto";
 import { HttpStatus } from "src/common/const/HttpStatusConst";
-import { GetBookListRequestDto } from "../dto/GetBookListReques.dto";
+import { GetBookListRequestDto } from "../dto/get-book-list-reques.dto";
 import { ApiResponse } from "src/common/api/ApiResponse";
 
 
