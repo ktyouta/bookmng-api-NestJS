@@ -41,6 +41,21 @@ xxx.filter.ts	独自の例外ハンドリング
 
 
 
+③実行順序
+
+1. Middleware（Expressベース。app.use() で登録）
+
+2. Guard（@UseGuards。ルートにアクセスして良いかを判定）
+
+3. Interceptor（前処理）（@UseInterceptors。リクエスト加工・ロギングなど）
+
+4. Pipe（@UsePipes。DTO変換やバリデーション）
+
+5. Controller（@Get/@Postなど）
+
+6. Interceptor（後処理）（レスポンスの加工など）
+
+7. Exception Filter（@UseFilters。例外が発生したときのみ）
 
 
 

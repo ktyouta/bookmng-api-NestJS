@@ -53,7 +53,8 @@ export const AppDataSource = new DataSource({
 
 
 ⑤以下のコマンドでマイグレーションを作成する
-コマンド：npm run typeorm migration:generate -- --dataSource src/datasource.ts --pretty migrations/InitialSchema
+コマンド：npm run typeorm migration:generate -- --dataSource src/datasource.ts --pretty migrations/コメント
+※コマンド実行後にマイグレーションファイルが作成される
 
 
 ⑥以下のコマンドでマイグレーションを実行する

@@ -5,11 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TestConnection } from './entities/TestConnection';
 import ENV from "../env.json";
 import * as dotenv from 'dotenv';
-import { AccessInterceptor } from './interceptor/AccessInterceptor';
+import { AccessInterceptor } from './interceptor/access.interceptor';
 import { TestController } from './test/controller/test.controller';
 import { TestService } from './test/service/test.service';
-import { CONTROLLER_LIST } from './module/ControllerList';
-import { PROVIDER_LIST } from './module/ProviderList';
+import { GetBookListModule } from './getbooklist/module/get-book-list.module';
+import { GetBookDetailModule } from './getbookdetail/module/get-book-detail.module';
+import { SeqMaster } from './entities/SeqMaster';
+import { CreateFrontUserModule } from './createfrontuser/module/create-front-user.module';
 
 
 dotenv.config();
@@ -25,14 +27,33 @@ dotenv.config();
       password: process.env.DATABASE_PASSWORD,
       database: ENV.DATABASE.NAME,
       schema: ENV.DATABASE.SCHEMA,
-      entities: [TestConnection],
+      entities: [
+        TestConnection,
+        SeqMaster
+      ],
       migrations: ['src/migrations/*.ts'],
       synchronize: false,
       logging: true,
     }),
-    TypeOrmModule.forFeature([TestConnection])
+    TypeOrmModule.forFeature([TestConnection]),
+    // 書籍一覧取得
+    GetBookListModule,
+    // 書籍詳細取得
+    GetBookDetailModule,
+    // ユーザー情報作成
+    CreateFrontUserModule,
   ],
-  controllers: CONTROLLER_LIST,
-  providers: PROVIDER_LIST,
+  controllers: [
+    AppController,
+    // テスト用
+    TestController,
+  ],
+  providers: [
+    AppService,
+    // インターセプター
+    AccessInterceptor,
+    // テスト
+    TestService,
+  ],
 })
 export class AppModule { }
