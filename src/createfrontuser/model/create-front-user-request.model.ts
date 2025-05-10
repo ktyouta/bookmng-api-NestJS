@@ -12,6 +12,8 @@ export class CreateFrontUserRequestModel {
     private readonly _frontUserPasswordModel: FrontUserPasswordModel;
     // 生年月日
     private readonly _frontUserBirthdayModel: FrontUserBirthdayModel;
+    // ソルト値
+    private readonly _saltValueModel: FrontUserSaltValueModel;
 
     constructor(createFrontUserRequestDto: CreateFrontUserRequestDto) {
 
@@ -21,6 +23,7 @@ export class CreateFrontUserRequestModel {
         this._frontUserNameModel = new FrontUserNameModel(createFrontUserRequestDto.userName);
         this._frontUserPasswordModel = FrontUserPasswordModel.hash(createFrontUserRequestDto.password, salt);
         this._frontUserBirthdayModel = new FrontUserBirthdayModel(createFrontUserRequestDto.birthday);
+        this._saltValueModel = salt;
     }
 
     get frontUserNameModel() {
@@ -33,5 +36,9 @@ export class CreateFrontUserRequestModel {
 
     get frontUserBirthdayModel() {
         return this._frontUserBirthdayModel;
+    }
+
+    get saltValueModel() {
+        return this._saltValueModel;
     }
 }

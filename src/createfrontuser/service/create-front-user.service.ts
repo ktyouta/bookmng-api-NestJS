@@ -9,6 +9,8 @@ import { EntityManager, Repository } from 'typeorm';
 import { CreateFrontUserRequestModel } from '../model/create-front-user-request.model';
 import { CreateFrontUserSelectUserEntity } from '../entity/create-front-user-select-user.entity';
 import { CreateFrontUserRepository } from '../repository/create-front-user-repository';
+import { FrontUserIdModel } from 'src/internal/common/FrontUserIdModel';
+import { CreateFrontUserCreateLoginEntity } from '../entity/create-front-user-create-login.entity';
 
 @Injectable()
 export class CreateFrontUserService {
@@ -29,5 +31,28 @@ export class CreateFrontUserService {
         const frontUserLoginList = await this.createFrontUserRepository.getFrontUser(createFrontUserSelectUserEntity);
 
         return frontUserLoginList && frontUserLoginList.length > 0;
+    }
+
+
+    /**
+     * ユーザーログイン情報作成
+     * @param frontUserIdModel 
+     * @param createFrontUserRequestModel 
+     */
+    async createLoginInfo(frontUserIdModel: FrontUserIdModel,
+        createFrontUserRequestModel: CreateFrontUserRequestModel
+    ) {
+
+        const createFrontUserCreateLoginEntity = new CreateFrontUserCreateLoginEntity(
+            frontUserIdModel,
+            createFrontUserRequestModel.frontUserPasswordModel,
+            createFrontUserRequestModel.saltValueModel,
+            createFrontUserRequestModel.frontUserNameModel,
+        );
+
+        // フロントユーザーログイン情報作成
+        const frontUserLoginInfo = await this.createFrontUserRepository.createUserLoginInfo(createFrontUserCreateLoginEntity);
+
+        return frontUserLoginInfo;
     }
 }

@@ -19,24 +19,37 @@ export class CreateFrontUserController {
     @UsePipes(new ValidationPipe({ whitelist: true }))
     async execute(@Query() requestDto: CreateFrontUserRequestDto) {
 
-        // トランザクション開始
         const tx = new TypeOrmTransaction();
-        await tx.start();
 
-        // リクエストの型変換
-        const createFrontUserRequestModel = new CreateFrontUserRequestModel(requestDto);
+        try {
+            // トランザクション開始
+            await tx.start();
 
-        // ユーザーの重複チェック
-        if (await this.createFrontUserService.isExitstUser(createFrontUserRequestModel)) {
-            return ApiResponse.create(HttpStatus.HTTP_STATUS_UNPROCESSABLE_ENTITY, `既にユーザーが存在しています。`);
+            // リクエストの型変換
+            const createFrontUserRequestModel = new CreateFrontUserRequestModel(requestDto);
+
+            // ユーザーの重複チェック
+            if (await this.createFrontUserService.isExitstUser(createFrontUserRequestModel)) {
+                return ApiResponse.create(HttpStatus.HTTP_STATUS_UNPROCESSABLE_ENTITY, `既にユーザーが存在しています。`);
+            }
+
+            // ユーザーID発番
+            const frontUserIdModel = await FrontUserIdModel.create();
+
+            // ユーザーログイン情報作成
+            await this.createFrontUserService.createLoginInfo(
+                frontUserIdModel,
+                createFrontUserRequestModel,
+            );
+
+            return ApiResponse.create(
+                HttpStatus.HTTP_STATUS_OK,
+                `ユーザーの作成に成功しました`,
+            );
+        } catch (e) {
+            tx.rollback();
+        } finally {
+            tx.release();
         }
-
-        // ユーザーID発番
-        const frontUserIdModel = FrontUserIdModel.create();
-
-        return ApiResponse.create(
-            HttpStatus.HTTP_STATUS_OK,
-            `ユーザーの作成に成功しました`,
-        );
     }
 }
