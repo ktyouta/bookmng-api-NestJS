@@ -4,15 +4,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { SeqMaster } from "src/entities/SeqMaster";
 import { Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
+import { TypeOrmRepository } from "../db/TypeOrmRepository";
 
 @Injectable()
 export class SeqIssue {
 
-    private readonly INCREMENT_SEQ = 1;
+    private static readonly INCREMENT_SEQ = 1;
+    private static readonly seqMasterRepository = TypeOrmRepository.get(SeqMaster);
 
-    constructor(
-        @InjectRepository(SeqMaster)
-        private readonly seqMasterRepository: Repository<SeqMaster>,
+    private constructor(
     ) { }
 
     /**
@@ -20,7 +20,7 @@ export class SeqIssue {
      * @param keyModel 
      * @returns 
      */
-    async get(keyModel: SeqKeyModel): Promise<number> {
+    static async get(keyModel: SeqKeyModel): Promise<number> {
 
         const sequence = await this.seqMasterRepository.findOneBy({ key: keyModel.key });
         if (!sequence) {
@@ -28,7 +28,7 @@ export class SeqIssue {
         }
 
         const retId = sequence.nextId;
-        const nextId = retId + this.INCREMENT_SEQ;
+        const nextId = retId + SeqIssue.INCREMENT_SEQ;
 
         await this.seqMasterRepository.update({ key: keyModel.key }, { nextId });
 

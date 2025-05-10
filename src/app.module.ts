@@ -14,6 +14,7 @@ import { SeqMaster } from './entities/SeqMaster';
 import { CreateFrontUserModule } from './createfrontuser/module/create-front-user.module';
 import { TYPEORM_CONFIG } from './typeorm.config';
 import { ENTITIES_LIST } from './entities/EntitiesList';
+import { TestModule } from './test/module/test.module';
 
 
 dotenv.config();
@@ -23,6 +24,8 @@ dotenv.config();
     // DB設定
     TypeOrmModule.forRoot(TYPEORM_CONFIG),
     TypeOrmModule.forFeature(ENTITIES_LIST),
+    // テスト接続用
+    TestModule,
     // 書籍一覧取得
     GetBookListModule,
     // 書籍詳細取得
@@ -32,15 +35,11 @@ dotenv.config();
   ],
   controllers: [
     AppController,
-    // テスト用
-    TestController,
   ],
   providers: [
     AppService,
     // インターセプター
     AccessInterceptor,
-    // テスト
-    TestService,
   ],
 })
 export class AppModule { }

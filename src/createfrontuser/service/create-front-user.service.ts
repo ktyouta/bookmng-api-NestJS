@@ -6,22 +6,28 @@ import { GoogleBooksApiBookListModel } from 'src/external/googlebooksapi/booklis
 import { GoogleBooksApiBooksListEndPointModel } from 'src/external/googlebooksapi/booklist/model/GoogleBooksApiBooksListEndPointModel';
 import { GoogleBooksApiBookListKeyword } from 'src/external/googlebooksapi/booklist/properties/GoogleBooksApiBookListKeyword';
 import { EntityManager, Repository } from 'typeorm';
+import { CreateFrontUserRequestModel } from '../model/create-front-user-request.model';
+import { CreateFrontUserSelectUserEntity } from '../entity/create-front-user-select-user.entity';
+import { CreateFrontUserRepository } from '../repository/create-front-user-repository';
 
 @Injectable()
 export class CreateFrontUserService {
 
-    constructor() { }
+    constructor(private readonly createFrontUserRepository: CreateFrontUserRepository,) { }
 
     /**
-     * Google Books APIから書籍一覧を取得
-     * @returns 
+     * ユーザーの重複チェック
+     * @param createFrontUserRequestModel 
      */
-    async getBookList(googleBooksApiBookListKeyword: GoogleBooksApiBookListKeyword): Promise<GoogleBooksApiBookListModel> {
+    async isExitstUser(createFrontUserRequestModel: CreateFrontUserRequestModel) {
 
-        const googleBooksApiBooksListEndPointModel = new GoogleBooksApiBooksListEndPointModel(googleBooksApiBookListKeyword);
+        const frontUserNameModel = createFrontUserRequestModel.frontUserNameModel;
 
-        const result = await GoogleBooksApiBookListModel.call(googleBooksApiBooksListEndPointModel);
+        const createFrontUserSelectUserEntity = new CreateFrontUserSelectUserEntity(frontUserNameModel);
 
-        return result;
+        // フロントユーザー情報を取得
+        const frontUserLoginList = await this.createFrontUserRepository.getFrontUser(createFrontUserSelectUserEntity);
+
+        return frontUserLoginList && frontUserLoginList.length > 0;
     }
 }
