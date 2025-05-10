@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, Column, BaseEntity, CreateDateColumn, UpdateDate
 
 @Entity({ name: 'seq_master', schema: 'bookmng' })
 export class SeqMaster extends BaseEntity {
-    @PrimaryColumn({ type: 'varchar', length: 10, name: 'key' })
+    @PrimaryColumn({ type: 'varchar', length: 1000, name: 'key' })
     key!: string;
 
     @Column({ type: 'int', name: 'next_id', nullable: true })

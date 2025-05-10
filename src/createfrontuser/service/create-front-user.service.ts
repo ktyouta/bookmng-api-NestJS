@@ -11,6 +11,7 @@ import { CreateFrontUserSelectUserEntity } from '../entity/create-front-user-sel
 import { CreateFrontUserRepository } from '../repository/create-front-user-repository';
 import { FrontUserIdModel } from 'src/internal/common/FrontUserIdModel';
 import { CreateFrontUserCreateLoginEntity } from '../entity/create-front-user-create-login.entity';
+import { CreateFrontUserCreateUserMasterEntity } from '../entity/create-front-user-create-user-master.entity';
 
 @Injectable()
 export class CreateFrontUserService {
@@ -39,7 +40,7 @@ export class CreateFrontUserService {
      * @param frontUserIdModel 
      * @param createFrontUserRequestModel 
      */
-    async createLoginInfo(frontUserIdModel: FrontUserIdModel,
+    async createUseriLoginInfo(frontUserIdModel: FrontUserIdModel,
         createFrontUserRequestModel: CreateFrontUserRequestModel
     ) {
 
@@ -52,6 +53,28 @@ export class CreateFrontUserService {
 
         // フロントユーザーログイン情報作成
         const frontUserLoginInfo = await this.createFrontUserRepository.createUserLoginInfo(createFrontUserCreateLoginEntity);
+
+        return frontUserLoginInfo;
+    }
+
+
+    /**
+     * ユーザーマスタ情報作成
+     * @param frontUserIdModel 
+     * @param createFrontUserRequestModel 
+     */
+    async createUserMasterInfo(frontUserIdModel: FrontUserIdModel,
+        createFrontUserRequestModel: CreateFrontUserRequestModel
+    ) {
+
+        const createFrontUserCreateUserMasterEntity = new CreateFrontUserCreateUserMasterEntity(
+            frontUserIdModel,
+            createFrontUserRequestModel.frontUserNameModel,
+            createFrontUserRequestModel.frontUserBirthdayModel,
+        );
+
+        // フロントユーザー情報作成
+        const frontUserLoginInfo = await this.createFrontUserRepository.createUserMasterInfo(createFrontUserCreateUserMasterEntity);
 
         return frontUserLoginInfo;
     }

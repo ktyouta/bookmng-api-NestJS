@@ -42,4 +42,7 @@ DATABASE_PASSWORD=DBの設定値を指定
 ※TypeORMマイグレーション手順.txt
 
 
-⑦npm startでアプリを起動する
+⑦⑪sqlフォルダ内のクエリを実行する
+
+
+⑧npm startでアプリを起動する

@@ -22,12 +22,24 @@ export class TypeOrmTransaction {
 
     // コミット
     async commit() {
-        await this.queryRunner.commitTransaction();
+        if (this.queryRunner.isTransactionActive) {
+            try {
+                await this.queryRunner.commitTransaction();
+            } catch (err) {
+                console.error('コミット中にエラーが発生しました:', err);
+            }
+        }
     }
 
     // ロールバック
     async rollback() {
-        await this.queryRunner.rollbackTransaction();
+        if (this.queryRunner.isTransactionActive) {
+            try {
+                await this.queryRunner.rollbackTransaction();
+            } catch (err) {
+                console.error('ロールバック中にエラーが発生しました:', err);
+            }
+        }
     }
 
     /**
