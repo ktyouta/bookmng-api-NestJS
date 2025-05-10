@@ -3,11 +3,14 @@ import { AppModule } from './app.module';
 import ENV from '../env.json';
 import { GlobalException } from './exception/GlobalException';
 import { AccessInterceptor } from './interceptor/access.interceptor';
+import { AppDataSource } from './datasource';
 
 
 async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
+
+  await AppDataSource.initialize();
 
   // CORS設定
   app.enableCors({

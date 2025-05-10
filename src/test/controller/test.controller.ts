@@ -2,23 +2,24 @@ import { Controller, Get, Req, Res } from '@nestjs/common';
 import { TestService } from '../service/test.service';
 import { ApiEndopoint, BOOKMNG_ENDPOINT_PATH } from 'src/common/api/ApiEndpoint';
 import { DataSource } from 'typeorm';
+import { TypeOrmTransaction } from 'src/common/db/TypeOrmTransaction';
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
 export class TestController {
 
     constructor(private readonly testService: TestService,
-        private readonly dataSource: DataSource
     ) { }
 
     @Get(ApiEndopoint.TEST)
     async execute(@Req() req: Request) {
 
-        const queryRunner = this.dataSource.createQueryRunner();
+        const tx = new TypeOrmTransaction();
 
         try {
+            console.log(`testConnection start`);
 
             // トランザクション開始
-            await queryRunner.startTransaction();
+            await tx.start();
 
             // test_connectionからレコードを取得(orm)
             const testConnectionOrm = await this.testService.getAllTestConnections();
@@ -41,7 +42,7 @@ export class TestController {
             });
 
             // コミット
-            await queryRunner.commitTransaction();
+            await tx.commit();
 
             return {
                 statusCode: 200,
@@ -51,11 +52,11 @@ export class TestController {
             };
 
         } catch (e) {
-            await queryRunner.rollbackTransaction();
+            await tx.rollback();
 
             throw Error(`ERROR:${e}`);
         } finally {
-            await queryRunner.release();
+            await tx.release();
         }
     }
 }

@@ -12,6 +12,8 @@ import { GetBookListModule } from './getbooklist/module/get-book-list.module';
 import { GetBookDetailModule } from './getbookdetail/module/get-book-detail.module';
 import { SeqMaster } from './entities/SeqMaster';
 import { CreateFrontUserModule } from './createfrontuser/module/create-front-user.module';
+import { TYPEORM_CONFIG } from './typeorm.config';
+import { ENTITIES_LIST } from './entities/EntitiesList';
 
 
 dotenv.config();
@@ -19,23 +21,8 @@ dotenv.config();
 @Module({
   imports: [
     // DB設定
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: ENV.DATABASE.HOST,
-      port: ENV.DATABASE.PORT,
-      username: ENV.DATABASE.USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      database: ENV.DATABASE.NAME,
-      schema: ENV.DATABASE.SCHEMA,
-      entities: [
-        TestConnection,
-        SeqMaster
-      ],
-      migrations: ['src/migrations/*.ts'],
-      synchronize: false,
-      logging: true,
-    }),
-    TypeOrmModule.forFeature([TestConnection]),
+    TypeOrmModule.forRoot(TYPEORM_CONFIG),
+    TypeOrmModule.forFeature(ENTITIES_LIST),
     // 書籍一覧取得
     GetBookListModule,
     // 書籍詳細取得

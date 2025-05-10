@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
+import { TypeOrmRepository } from 'src/common/db/TypeOrmRepository';
 import { TestConnection } from 'src/entities/TestConnection';
 import { EntityManager, Repository } from 'typeorm';
 
@@ -8,8 +9,6 @@ import { EntityManager, Repository } from 'typeorm';
 export class TestService {
 
     constructor(
-        @InjectRepository(TestConnection)
-        private readonly testConnectionRepository: Repository<TestConnection>,
         private readonly entityManager: EntityManager,
     ) { }
 
@@ -18,7 +17,9 @@ export class TestService {
      */
     async getAllTestConnections(): Promise<TestConnection[]> {
 
-        const testConnection = await this.testConnectionRepository.find();
+        const testConnectionRepository = TypeOrmRepository.get(TestConnection);
+
+        const testConnection = await testConnectionRepository.find();
 
         return testConnection;
     }
