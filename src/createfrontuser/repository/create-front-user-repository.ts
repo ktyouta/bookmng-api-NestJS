@@ -7,6 +7,7 @@ import { FrontUserInfoMaster } from "src/entities/FrontUserInfoMaster";
 import { CreateFrontUserCreateUserMasterEntity } from "../entity/create-front-user-create-user-master.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { DeleteFlgModel } from "src/internal/common/DeleteFlgModel";
 
 @Injectable()
 export class CreateFrontUserRepository {
@@ -56,6 +57,9 @@ export class CreateFrontUserRepository {
             password,
             userName,
             salt,
+            createDate: new Date(),
+            updateDate: new Date(),
+            deleteFlg: DeleteFlgModel.OFF,
         });
 
         return userLoginInfo;
@@ -76,7 +80,10 @@ export class CreateFrontUserRepository {
         const userMasterInfo = await this.frontUserInfoMasterRepository.insert({
             userId,
             userName,
-            userBirthday
+            userBirthday,
+            createDate: new Date(),
+            updateDate: new Date(),
+            deleteFlg: DeleteFlgModel.OFF,
         });
 
         return userMasterInfo;

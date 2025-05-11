@@ -3,6 +3,7 @@ import { QueryRunner } from 'typeorm';
 
 
 export class TypeOrmTransaction {
+
     private queryRunner: QueryRunner;
 
     constructor() {
@@ -22,7 +23,8 @@ export class TypeOrmTransaction {
 
     // コミット
     async commit() {
-        if (this.queryRunner.isTransactionActive) {
+
+        if (this.isActive()) {
             try {
                 await this.queryRunner.commitTransaction();
             } catch (err) {
@@ -33,7 +35,8 @@ export class TypeOrmTransaction {
 
     // ロールバック
     async rollback() {
-        if (this.queryRunner.isTransactionActive) {
+
+        if (this.isActive()) {
             try {
                 await this.queryRunner.rollbackTransaction();
             } catch (err) {
@@ -46,6 +49,21 @@ export class TypeOrmTransaction {
      * リソース開放
      */
     async release() {
-        await this.queryRunner.release();
+
+        if (this.isActive()) {
+            try {
+                await this.queryRunner.release();
+            } catch (err) {
+                console.error('リソース開放中にエラーが発生しました:', err);
+            }
+        }
+    }
+
+    /**
+     * トランザクション開始判定
+     * @returns 
+     */
+    isActive() {
+        return this.queryRunner.isTransactionActive;
     }
 }

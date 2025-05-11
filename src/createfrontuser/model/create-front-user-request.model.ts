@@ -27,7 +27,7 @@ export class CreateFrontUserRequestModel {
     }
 
     get frontUserNameModel() {
-        return this.frontUserNameModel;
+        return this._frontUserNameModel;
     }
 
     get frontUserPasswordModel() {

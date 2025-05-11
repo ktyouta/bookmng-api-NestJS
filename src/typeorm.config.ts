@@ -21,5 +21,5 @@ export const TYPEORM_CONFIG: DataSourceOptions = {
     entities: ENTITIES_LIST,
     migrations: ['src/migrations/*.ts'],
     synchronize: false,
-    logging: true,
+    //logging: true,
 };

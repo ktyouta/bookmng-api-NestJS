@@ -19,12 +19,12 @@ export class CreateFrontUserController {
     @UsePipes(new ValidationPipe({ whitelist: true }))
     async execute(@Body() requestDto: CreateFrontUserRequestDto) {
 
+        // ユーザーID発番
+        const frontUserIdModel = await FrontUserIdModel.create();
+
         const tx = new TypeOrmTransaction();
 
         try {
-            // ユーザーID発番
-            const frontUserIdModel = await FrontUserIdModel.create();
-
             // トランザクション開始
             await tx.start();
 
@@ -32,7 +32,9 @@ export class CreateFrontUserController {
             const createFrontUserRequestModel = new CreateFrontUserRequestModel(requestDto);
 
             // ユーザーの重複チェック
-            if (await this.createFrontUserService.isExitstUser(createFrontUserRequestModel)) {
+            const isExitst = await this.createFrontUserService.isExitstUser(createFrontUserRequestModel);
+
+            if (isExitst) {
                 return ApiResponse.create(HttpStatus.HTTP_STATUS_UNPROCESSABLE_ENTITY, `既にユーザーが存在しています。`);
             }
 
@@ -56,8 +58,11 @@ export class CreateFrontUserController {
                 `ユーザーの作成に成功しました`,
             );
         } catch (e) {
-            tx.rollback();
-            throw Error(`ユーザー情報作成中にエラーが発生しました。ERROR:${e}`);
+
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw Error(`ユーザー情報作成中にエラーが発生しました。ENDPOINT:${ApiEndopoint.FRONT_USER} MTTHOD:POST ERROR:${e}`);
         } finally {
             tx.release();
         }
