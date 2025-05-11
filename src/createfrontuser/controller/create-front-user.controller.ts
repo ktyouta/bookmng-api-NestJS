@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Req, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query, Req, Res, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiEndopoint, BOOKMNG_ENDPOINT_PATH } from "src/common/api/ApiEndpoint";
 import { GoogleBooksApiBookListKeyword } from "src/external/googlebooksapi/booklist/properties/GoogleBooksApiBookListKeyword";
 import { HttpStatus } from "src/common/const/HttpStatusConst";
@@ -8,6 +8,9 @@ import { CreateFrontUserRequestDto } from "../dto/create-front-user-request.dto"
 import { CreateFrontUserRequestModel } from "../model/create-front-user-request.model";
 import { TypeOrmTransaction } from "src/common/db/TypeOrmTransaction";
 import { FrontUserIdModel } from "src/internal/common/FrontUserIdModel";
+import { JsonWebTokenModel } from "src/jsonwebtoken/model/JsonWebTokenModel";
+import { Response } from 'express';
+import { NewJsonWebTokenModel } from "src/jsonwebtoken/model/NewJsonWebTokenModel";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -17,7 +20,18 @@ export class CreateFrontUserController {
 
     @Post(ApiEndopoint.FRONT_USER)
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    async execute(@Body() requestDto: CreateFrontUserRequestDto) {
+    async execute(@Body() requestDto: CreateFrontUserRequestDto,
+        @Res({ passthrough: true }) res: Response) {
+
+        // リクエストの型変換
+        const createFrontUserRequestModel = new CreateFrontUserRequestModel(requestDto);
+
+        // ユーザーの重複チェック
+        const isExitst = await this.createFrontUserService.isExitstUser(createFrontUserRequestModel);
+
+        if (isExitst) {
+            return ApiResponse.create(HttpStatus.HTTP_STATUS_UNPROCESSABLE_ENTITY, `既にユーザーが存在しています。`);
+        }
 
         // ユーザーID発番
         const frontUserIdModel = await FrontUserIdModel.create();
@@ -27,16 +41,6 @@ export class CreateFrontUserController {
         try {
             // トランザクション開始
             await tx.start();
-
-            // リクエストの型変換
-            const createFrontUserRequestModel = new CreateFrontUserRequestModel(requestDto);
-
-            // ユーザーの重複チェック
-            const isExitst = await this.createFrontUserService.isExitstUser(createFrontUserRequestModel);
-
-            if (isExitst) {
-                return ApiResponse.create(HttpStatus.HTTP_STATUS_UNPROCESSABLE_ENTITY, `既にユーザーが存在しています。`);
-            }
 
             // ユーザーログイン情報作成
             await this.createFrontUserService.createUseriLoginInfo(
@@ -49,6 +53,13 @@ export class CreateFrontUserController {
                 frontUserIdModel,
                 createFrontUserRequestModel,
             );
+
+            // jwtを作成
+            const newJsonWebTokenModel =
+                await this.createFrontUserService.createJsonWebToken(frontUserIdModel, createFrontUserRequestModel);
+
+            // cookieを返却
+            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
             // コミット
             await tx.commit();

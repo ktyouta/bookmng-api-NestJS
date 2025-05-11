@@ -12,6 +12,8 @@ import { CreateFrontUserRepository } from '../repository/create-front-user-repos
 import { FrontUserIdModel } from 'src/internal/common/FrontUserIdModel';
 import { CreateFrontUserCreateLoginEntity } from '../entity/create-front-user-create-login.entity';
 import { CreateFrontUserCreateUserMasterEntity } from '../entity/create-front-user-create-user-master.entity';
+import { NewJsonWebTokenModel } from 'src/jsonwebtoken/model/NewJsonWebTokenModel';
+import { ApiEndopoint } from 'src/common/api/ApiEndpoint';
 
 @Injectable()
 export class CreateFrontUserService {
@@ -77,5 +79,26 @@ export class CreateFrontUserService {
         const frontUserLoginInfo = await this.createFrontUserRepository.createUserMasterInfo(createFrontUserCreateUserMasterEntity);
 
         return frontUserLoginInfo;
+    }
+
+
+    /**
+     * jwtを作成する
+     * @param userIdModel 
+     * @param frontUserInfoCreateRequestBody 
+     */
+    public createJsonWebToken(userIdModel: FrontUserIdModel,
+        createFrontUserRequestModel: CreateFrontUserRequestModel
+    ) {
+
+        const frontUserPassword = createFrontUserRequestModel.frontUserPasswordModel;
+
+        try {
+            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel, frontUserPassword);
+
+            return newJsonWebTokenModel;
+        } catch (err) {
+            throw Error(`${err} ENDPOINT:${ApiEndopoint.FRONT_USER}`);
+        }
     }
 }
