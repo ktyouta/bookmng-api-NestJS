@@ -15,6 +15,7 @@ import { CreateFrontUserModule } from './createfrontuser/module/create-front-use
 import { TYPEORM_CONFIG } from './typeorm.config';
 import { ENTITIES_LIST } from './entities/EntitiesList';
 import { TestModule } from './test/module/test.module';
+import { FrontUserLoginModule } from './frontuserlogin/module/front-user-login.module';
 
 
 dotenv.config();
@@ -32,6 +33,8 @@ dotenv.config();
     GetBookDetailModule,
     // ユーザー情報作成
     CreateFrontUserModule,
+    // ログイン(フロント)
+    FrontUserLoginModule,
   ],
   controllers: [
     AppController,

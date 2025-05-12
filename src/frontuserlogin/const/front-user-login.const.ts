@@ -1,0 +1,1 @@
+export const ERR_MESSAGE_FAILURE_REQUEST = `ユーザー名かパスワードが間違っています。`;

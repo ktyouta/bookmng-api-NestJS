@@ -8,4 +8,6 @@ export enum ApiEndopoint {
     BOOK_ID = "book/:id",
     // ユーザー
     FRONT_USER = "frontuser",
+    // ログイン(フロント)
+    FRONT_USER_LOGIN = "frontuserlogin",
 }
