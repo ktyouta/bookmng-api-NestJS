@@ -7,6 +7,7 @@ import { NewJsonWebTokenModel } from './NewJsonWebTokenModel';
 import { FrontUserPasswordModel } from 'src/internal/frontuserloginmaster/FrontUserPasswordModel';
 import { envConfig } from 'src/common/const/EnvConfig';
 import { JsonWebTokenUserInfoRepositoryJson } from '../repository/JsonWebTokenUserInfoRepositoryJson';
+import { Request } from 'express';
 
 
 export class JsonWebTokenUserModel {
@@ -34,9 +35,11 @@ export class JsonWebTokenUserModel {
      * @param token 
      * @returns 
      */
-    static async get(cookieModel: CookieModel,
+    static async get(req: Request,
         jsonWebTokenUserInfoRepositoryJson: JsonWebTokenUserInfoRepositoryJson
     ) {
+
+        const cookieModel = new CookieModel(req);
 
         // jwt
         const jsonWebTokenModel = new JsonWebTokenModel(cookieModel);

@@ -17,6 +17,9 @@ async function bootstrap() {
     origin: [`${ENV.CORS.PROTOCOL}${ENV.CORS.DOMAIN}${ENV.CORS.PORT}`],
   });
 
+  const cookieParser = require("cookie-parser");
+  app.use(cookieParser());
+
   // エンドポイントアクセス時処理
   app.useGlobalInterceptors(app.get(AccessInterceptor));
 
