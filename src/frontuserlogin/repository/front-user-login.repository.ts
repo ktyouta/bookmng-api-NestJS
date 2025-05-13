@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DeleteFlgModel } from "src/internal/common/DeleteFlgModel";
 import { FrontUserLoginSelectEntity } from "../entity/front-user-login-select.entity";
+import { FrontUserLoginUserMasterSelectEntity } from "../entity/front-user-login-user-master-select.entit";
 
 @Injectable()
 export class FrontUserLoginRepository {
@@ -35,5 +36,25 @@ export class FrontUserLoginRepository {
         });
 
         return frontUserLoginList;
+    }
+
+
+    /**
+     * フロントユーザーマスタ情報を取得
+     * @param frontUserLoginUserMasterSelectEntity 
+     * @returns 
+     */
+    async getFrontUserMaster(frontUserLoginUserMasterSelectEntity: FrontUserLoginUserMasterSelectEntity) {
+
+        const frontUserId = frontUserLoginUserMasterSelectEntity.frontUserId;
+
+        // ユーザー情報を取得
+        const frontUserMasterList = await this.frontUserInfoMasterRepository.find({
+            where: {
+                userId: frontUserId,
+            },
+        });
+
+        return frontUserMasterList;
     }
 }

@@ -40,15 +40,32 @@ export class FrontUserLoginController {
         const saltValueModel = FrontUserSaltValueModel.reConstruct(userLoginInfo.salt);
         const password = userLoginInfo.password;
         const inputPasswordModel = FrontUserPasswordModel.hash(requestDto.password, saltValueModel);
+        const userIdModel = FrontUserIdModel.reConstruct(userLoginInfo.userId);
 
         // パスワードチェック
         if (inputPasswordModel.frontUserPassword !== password) {
             return ApiResponse.create(HttpStatus.HTTP_STATUS_UNPROCESSABLE_ENTITY, ERR_MESSAGE_FAILURE_REQUEST);
         }
 
+        // ユーザー情報取得
+        const frontUserMasterList = await this.frontUserLoginService.getUserInfo(userIdModel);
+
+        if (!frontUserMasterList || frontUserMasterList.length === 0) {
+            throw Error(`ユーザーマスタからユーザー情報が取得できませんでした。ユーザーID:${userIdModel.frontUserId} ユーザー名:${requestDto.userName}`);
+        }
+
+        const frontUserMaster = frontUserMasterList[0];
+
+        // jwtを作成
+        const newJsonWebTokenModel = await this.frontUserLoginService.createJsonWebToken(userIdModel, inputPasswordModel);
+
+        // cookieを返却
+        res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+
         return ApiResponse.create(
             HttpStatus.HTTP_STATUS_OK,
             `ログインに成功しました`,
+            frontUserMaster,
         );
     }
 }
