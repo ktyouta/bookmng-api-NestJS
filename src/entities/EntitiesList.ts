@@ -1,3 +1,4 @@
+import { BookshelfTransaction } from "./BookshelfTransaction";
 import { FrontUserInfoMaster } from "./FrontUserInfoMaster";
 import { FrontUserLoginMaster } from "./FrontUserLoginMaster";
 import { SeqMaster } from "./SeqMaster";
@@ -13,4 +14,6 @@ export const ENTITIES_LIST = [
     FrontUserLoginMaster,
     // フロントユーザーマスタ
     FrontUserInfoMaster,
+    // 本棚
+    BookshelfTransaction
 ];

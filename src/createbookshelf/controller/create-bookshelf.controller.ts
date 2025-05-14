@@ -11,6 +11,9 @@ import { NewJsonWebTokenModel } from "src/jsonwebtoken/model/NewJsonWebTokenMode
 import { CreateBookshelfService } from "../service/create-bookshelf.service";
 import { CreateBookshelfRequestDto } from "../dto/create-bookshelf-request.dto";
 import { CookieCheckGuard } from "src/guard/cookie-check.guard";
+import { JsonWebTokenUserModel } from "src/jsonwebtoken/model/JsonWebTokenUserModel";
+import { Request } from 'express';
+import { CreateBookshelfRequestModel } from "../model/create-bookshelf.model";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -25,7 +28,17 @@ export class CreateBookshelfController {
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(CreateBookshelfController.ENDPOINT)
     async execute(@Body() requestDto: CreateBookshelfRequestDto,
+        @Req() req: Request,
         @Res({ passthrough: true }) res: Response) {
+
+        // jwt認証
+        const jsonWebTokenUserModel = await JsonWebTokenUserModel.get(req);
+        const userIdModel = jsonWebTokenUserModel.frontUserIdModel;
+
+        // リクエストモデルに変換
+        const createBookshelfRequestModel = new CreateBookshelfRequestModel(requestDto);
+
+        // 書籍の重複チェック
 
         const tx = new TypeOrmTransaction();
 

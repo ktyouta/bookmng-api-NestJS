@@ -8,11 +8,15 @@ import { FrontUserPasswordModel } from 'src/internal/frontuserloginmaster/FrontU
 import { envConfig } from 'src/common/const/EnvConfig';
 import { JsonWebTokenUserInfoRepositoryJson } from '../repository/JsonWebTokenUserInfoRepositoryJson';
 import { Request } from 'express';
+import { EntityManager } from 'typeorm';
+import { AppDataSource } from 'src/datasource';
+import { DeleteFlgModel } from 'src/internal/common/DeleteFlgModel';
 
 
 export class JsonWebTokenUserModel {
 
     private static readonly jwt = require("jsonwebtoken");
+    private static readonly entityManager: EntityManager = AppDataSource.manager;
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
     // パスワード
@@ -35,9 +39,7 @@ export class JsonWebTokenUserModel {
      * @param token 
      * @returns 
      */
-    static async get(req: Request,
-        jsonWebTokenUserInfoRepositoryJson: JsonWebTokenUserInfoRepositoryJson
-    ) {
+    static async get(req: Request) {
 
         const cookieModel = new CookieModel(req);
 
@@ -79,7 +81,6 @@ export class JsonWebTokenUserModel {
             const frontUserList = await this.getFrontUser(
                 frontUserIdModel,
                 frontUserPassword,
-                jsonWebTokenUserInfoRepositoryJson,
             );
 
             // jwtのユーザー情報がユーザーマスタに存在しない
@@ -120,17 +121,27 @@ export class JsonWebTokenUserModel {
      * @param frontUserPassword 
      * @returns 
      */
-    private static getFrontUser(frontUserIdModel: FrontUserIdModel,
-        frontUserPassword: FrontUserPasswordModel,
-        jsonWebTokenUserInfoRepositoryJson: JsonWebTokenUserInfoRepositoryJson) {
+    private static async getFrontUser(frontUserIdModel: FrontUserIdModel,
+        frontUserPassword: FrontUserPasswordModel,) {
 
         // ユーザログイン情報取得用Entity
         const frontUserInfoCreateSelectEntity = new JsonWebTokenUserInfoSelectEntity(frontUserIdModel, frontUserPassword);
 
-        // ユーザーログイン情報を取得
-        const frontUserList = jsonWebTokenUserInfoRepositoryJson.select(frontUserInfoCreateSelectEntity);
+        const userId = frontUserInfoCreateSelectEntity.frontUserId;
+        const password = frontUserInfoCreateSelectEntity.frontUserPassword;
+
+        // ユーザー情報を取得
+        const frontUserList = await this.entityManager.query(
+            `SELECT 
+                        *
+                    FROM bookmng.front_user_login_master a 
+                    INNER JOIN bookmng.front_user_info_master b
+                    ON a.user_id = CAST(${userId} AS INTEGER) AND
+                    a.password = ${password} AND
+                    a.delete_flg = ${DeleteFlgModel.OFF} AND
+                    a.user_id = b.user_id`
+        );
 
         return frontUserList;
     }
-
 }
