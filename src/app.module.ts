@@ -16,6 +16,7 @@ import { TYPEORM_CONFIG } from './typeorm.config';
 import { ENTITIES_LIST } from './entities/EntitiesList';
 import { TestModule } from './test/module/test.module';
 import { FrontUserLoginModule } from './frontuserlogin/module/front-user-login.module';
+import { CreateBookshelfModule } from './createbookshelf/module/create-bookshelf.module';
 
 
 dotenv.config();
@@ -35,6 +36,8 @@ dotenv.config();
     CreateFrontUserModule,
     // ログイン(フロント)
     FrontUserLoginModule,
+    // 本棚登録
+    CreateBookshelfModule,
   ],
   controllers: [
     AppController,

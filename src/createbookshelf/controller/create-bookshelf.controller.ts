@@ -39,6 +39,14 @@ export class CreateBookshelfController {
         const createBookshelfRequestModel = new CreateBookshelfRequestModel(requestDto);
 
         // 書籍の重複チェック
+        const bookshelfList = await this.createBookshelfService.getBookshelfList(
+            userIdModel,
+            createBookshelfRequestModel
+        );
+
+        if (bookshelfList && bookshelfList.length > 0) {
+            return ApiResponse.create(HttpStatus.HTTP_STATUS_UNPROCESSABLE_ENTITY, `既に本棚に登録されています。`);
+        }
 
         const tx = new TypeOrmTransaction();
 
@@ -46,12 +54,19 @@ export class CreateBookshelfController {
             // トランザクション開始
             await tx.start();
 
+            // 本棚に登録
+            const bookshelf = await this.createBookshelfService.createBookshelf(
+                userIdModel,
+                createBookshelfRequestModel
+            );
+
             // コミット
             await tx.commit();
 
             return ApiResponse.create(
                 HttpStatus.HTTP_STATUS_OK,
                 `本棚に登録しました`,
+                bookshelf,
             );
         } catch (e) {
 
