@@ -77,7 +77,7 @@ export class CreateFrontUserRepository {
         const userBirthday = createFrontUserCreateUserMasterEntity.frontUserBirthDay;
 
         // ユーザー情報作成
-        const userMasterInfo = await this.frontUserInfoMasterRepository.insert({
+        const userMasterInfo = await this.frontUserInfoMasterRepository.save({
             userId,
             userName,
             userBirthday,

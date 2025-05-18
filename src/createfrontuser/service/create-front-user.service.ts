@@ -76,9 +76,9 @@ export class CreateFrontUserService {
         );
 
         // フロントユーザー情報作成
-        const frontUserLoginInfo = await this.createFrontUserRepository.createUserMasterInfo(createFrontUserCreateUserMasterEntity);
+        const frontUserInfo = await this.createFrontUserRepository.createUserMasterInfo(createFrontUserCreateUserMasterEntity);
 
-        return frontUserLoginInfo;
+        return frontUserInfo;
     }
 
 

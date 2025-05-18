@@ -11,6 +11,7 @@ import { FrontUserIdModel } from "src/internal/common/FrontUserIdModel";
 import { JsonWebTokenModel } from "src/jsonwebtoken/model/JsonWebTokenModel";
 import { Response } from 'express';
 import { NewJsonWebTokenModel } from "src/jsonwebtoken/model/NewJsonWebTokenModel";
+import { CreateFrontUserResponseModel } from "../model/create-front-user-response.model";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -49,7 +50,7 @@ export class CreateFrontUserController {
             );
 
             // ユーザーマスタ情報作成
-            await this.createFrontUserService.createUserMasterInfo(
+            const frontUserInfo = await this.createFrontUserService.createUserMasterInfo(
                 frontUserIdModel,
                 createFrontUserRequestModel,
             );
@@ -57,6 +58,9 @@ export class CreateFrontUserController {
             // jwtを作成
             const newJsonWebTokenModel =
                 await this.createFrontUserService.createJsonWebToken(frontUserIdModel, createFrontUserRequestModel);
+
+            // レスポンス
+            const createFrontUserResponseModel = new CreateFrontUserResponseModel(frontUserInfo);
 
             // cookieを返却
             res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
@@ -67,6 +71,7 @@ export class CreateFrontUserController {
             return ApiResponse.create(
                 HttpStatus.HTTP_STATUS_OK,
                 `ユーザーの作成に成功しました`,
+                createFrontUserResponseModel,
             );
         } catch (e) {
 

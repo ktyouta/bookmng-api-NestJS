@@ -15,6 +15,7 @@ async function bootstrap() {
   // CORS設定
   app.enableCors({
     origin: [`${ENV.CORS.PROTOCOL}${ENV.CORS.DOMAIN}${ENV.CORS.PORT}`],
+    credentials: true,
   });
 
   const cookieParser = require("cookie-parser");
