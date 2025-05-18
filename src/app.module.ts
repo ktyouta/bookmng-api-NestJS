@@ -18,6 +18,7 @@ import { TestModule } from './test/module/test.module';
 import { FrontUserLoginModule } from './frontuserlogin/module/front-user-login.module';
 import { CreateBookshelfModule } from './createbookshelf/module/create-bookshelf.module';
 import { GetBookshelfListModule } from './getbookshelflist/module/get-bookshelf-list.module';
+import { FrontUserCheckAuthModule } from './frontusercheckauth/module/front-user-check-auth.module';
 
 
 dotenv.config();
@@ -41,6 +42,8 @@ dotenv.config();
     CreateBookshelfModule,
     // 本棚情報取得
     GetBookshelfListModule,
+    // 認証
+    FrontUserCheckAuthModule,
   ],
   controllers: [
     AppController,
