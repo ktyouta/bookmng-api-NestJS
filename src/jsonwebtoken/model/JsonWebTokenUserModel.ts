@@ -133,13 +133,16 @@ export class JsonWebTokenUserModel {
         // ユーザー情報を取得
         const frontUserList = await this.entityManager.query(
             `SELECT 
-                        *
-                    FROM bookmng.front_user_login_master a 
-                    INNER JOIN bookmng.front_user_info_master b
-                    ON a.user_id = CAST(${userId} AS INTEGER) AND
-                    a.password = ${password} AND
-                    a.delete_flg = ${DeleteFlgModel.OFF} AND
-                    a.user_id = b.user_id`
+                    *
+                FROM 
+                    bookmng.front_user_login_master a 
+                INNER JOIN 
+                    bookmng.front_user_info_master b
+                    ON a.user_id = CAST($1 AS INTEGER) AND
+                    a.password = $2 AND
+                    a.delete_flg = $3 AND
+                    a.user_id = b.user_id`,
+            [userId, password, DeleteFlgModel.OFF]
         );
 
         return frontUserList;
