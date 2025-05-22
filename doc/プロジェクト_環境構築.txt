@@ -1,4 +1,4 @@
-■環境構築
+■プロジェクト_環境構築
 
 ①Nest CLI のインストール（初回のみ）
 コマンド：npm i -g @nestjs/cli
@@ -30,19 +30,25 @@
     }
 }
 
-④プロジェクト直下に.envを作成
+④GoogleBooksApiの認証キーを取得
+※GoogleBooksApi_利用方法.txt 参照
+
+
+⑤プロジェクト直下に.envを作成
 BOOKMNG_JWT_KEY=任意の文字列を設定
 DATABASE_PASSWORD=DBの設定値を指定
-
-⑤DB設定
-※Postgresql設定.txt参照
+GOOGLE_BOOKS_API_KEY=GoogleBooksApiの認証キー
 
 
-⑥TypeORM導入
-※TypeORMマイグレーション手順.txt
+⑥DB設定
+※Postgresql設定.txt 参照
 
 
-⑦⑪sqlフォルダ内のクエリを実行する
+⑦TypeORM導入
+※TypeORMマイグレーション手順.txt 参照
 
 
-⑧npm startでアプリを起動する
+⑧sqlフォルダ内のクエリを実行する
+
+
+⑨npm startでアプリを起動する
