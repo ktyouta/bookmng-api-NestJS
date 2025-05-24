@@ -1,8 +1,9 @@
 import { QueryBuilderUtil } from "src/common/util/QueryBuilderUtil";
 import { GoogleBooksApiBooksBasePathModel } from "../../common/model/GoogleBooksApiBooksBasePathModel";
 import { GoogleBooksApiBookListKeyword } from "../properties/GoogleBooksApiBookListKeyword";
-import { GoogleBooksApiBookListMaxResult } from "../properties/GoogleBooksApiBookListMaxResult";
-import { GoogleBooksApiApiKey } from "../../common/properties/GoogleBooksApiApiKey";
+import { GoogleBooksApiBookListMaxResultQuery } from "../properties/GoogleBooksApiBookListMaxResultQuery";
+import { GoogleBooksApiApiKeyQuery } from "../../common/properties/GoogleBooksApiApiKeyQuery";
+import { GoogleBooksApiBookListStartIndexQuery } from "../properties/GoogleBooksApiBookListStartIndexQuery";
 
 
 /**
@@ -14,19 +15,31 @@ export class GoogleBooksApiBooksListEndPointModel {
     // パス
     private static readonly PATH: string = `${GoogleBooksApiBooksBasePathModel.BASE_PATH}/volumes`;
     // APIキー
-    private readonly googleBooksApiApiKey: GoogleBooksApiApiKey = new GoogleBooksApiApiKey();
+    private readonly googleBooksApiApiKeyQuery: GoogleBooksApiApiKeyQuery = new GoogleBooksApiApiKeyQuery();
 
 
-    constructor(googleBooksApiBookListKeyword: GoogleBooksApiBookListKeyword,) {
+    constructor(googleBooksApiBookListKeyword: GoogleBooksApiBookListKeyword,
+        googleBooksApiBookListStartIndexQuery: GoogleBooksApiBookListStartIndexQuery,
+        googleBooksApiBookListMaxResultQuery: GoogleBooksApiBookListMaxResultQuery
+    ) {
 
         // クエリパラメータを作成
-        const queryBuilder: QueryBuilderUtil = new QueryBuilderUtil(GoogleBooksApiBookListKeyword.QUERYKEY, googleBooksApiBookListKeyword.value);
-        queryBuilder.add(GoogleBooksApiBookListMaxResult.KEY, GoogleBooksApiBookListMaxResult.VALUE);
-        queryBuilder.add(GoogleBooksApiApiKey.KEY, this.googleBooksApiApiKey.value);
+        let query = `${googleBooksApiBookListKeyword.query}`;
 
-        const queryParam = queryBuilder.createParam();
+        if (this.googleBooksApiApiKeyQuery.query) {
+            query += `&${this.googleBooksApiApiKeyQuery.query}`;
+        }
 
-        this._url = `${GoogleBooksApiBooksListEndPointModel.PATH}${queryParam ? `?${queryParam}` : ``}`
+        if (googleBooksApiBookListStartIndexQuery.query) {
+            query += `&${googleBooksApiBookListStartIndexQuery.query}`;
+        }
+
+        if (googleBooksApiBookListMaxResultQuery.query) {
+            query += `&${googleBooksApiBookListMaxResultQuery.query}`;
+        }
+
+        this._url = `${GoogleBooksApiBooksListEndPointModel.PATH}${query ? `?${query}` : ``}`;
+        console.log(`url:${this._url}`);
     }
 
     get url() {

@@ -6,6 +6,7 @@ import { GetBookListResponseDto } from "../dto/get-book-list-response.dto";
 import { HttpStatus } from "src/common/const/HttpStatusConst";
 import { GetBookListRequestDto } from "../dto/get-book-list-reques.dto";
 import { ApiResponse } from "src/common/api/ApiResponse";
+import { GetBookListRequestModel } from "../model/get-book-list-request.model";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -14,15 +15,16 @@ export class GetBookListController {
     constructor(private readonly getBookListService: GetBookListService,) { }
 
     @Get(ApiEndopoint.BOOK)
-    @UsePipes(new ValidationPipe({ whitelist: true }))
+    @UsePipes(new ValidationPipe({
+        whitelist: true,
+        transform: true,
+    }))
     async execute(@Query() requestDto: GetBookListRequestDto) {
 
-        // キーワードを取得
-        const keyword = requestDto.q;
-        const googleBooksApiBookListKeyword = new GoogleBooksApiBookListKeyword(keyword);
+        const getBookListRequestModel = new GetBookListRequestModel(requestDto);
 
         // Google Books APIから書籍一覧を取得する
-        const bookListModel = await this.getBookListService.getBookList(googleBooksApiBookListKeyword);
+        const bookListModel = await this.getBookListService.getBookList(getBookListRequestModel);
 
         // レスポンスの書籍一覧
         const getBookListResponseDto = new GetBookListResponseDto(bookListModel);

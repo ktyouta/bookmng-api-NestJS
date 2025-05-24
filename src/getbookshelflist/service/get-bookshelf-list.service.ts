@@ -33,19 +33,6 @@ export class GetBookshelfListService {
         return bookshelfList;
     }
 
-    /**
-     * Google Books APIから書籍一覧を取得
-     * @returns 
-     */
-    async getBookList(googleBooksApiBookListKeyword: GoogleBooksApiBookListKeyword): Promise<GoogleBooksApiBookListModel> {
-
-        const googleBooksApiBooksListEndPointModel = new GoogleBooksApiBooksListEndPointModel(googleBooksApiBookListKeyword);
-
-        const result = await GoogleBooksApiBookListModel.call(googleBooksApiBooksListEndPointModel);
-
-        return result;
-    }
-
 
     /**
      * 本棚情報をもとにGoogle Books APIから書籍情報を取得

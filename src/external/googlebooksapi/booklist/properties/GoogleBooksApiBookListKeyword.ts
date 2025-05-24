@@ -1,8 +1,9 @@
 export class GoogleBooksApiBookListKeyword {
 
-    private readonly _value: string;
     // Google Books Api(書籍一覧)のクエリキー(キーワード)
-    static readonly QUERYKEY: string = `q`;
+    static readonly KEY: string = `q`;
+    // クエリパラメータ
+    private readonly _query: string;
 
     constructor(keyword: string) {
 
@@ -10,10 +11,10 @@ export class GoogleBooksApiBookListKeyword {
             throw Error(`Google Books Api(書籍一覧)の呼び出しにはキーワードが必須です。`);
         }
 
-        this._value = keyword;
+        this._query = `${GoogleBooksApiBookListKeyword.KEY}=${keyword}`;
     }
 
-    get value() {
-        return this._value;
+    get query() {
+        return this._query;
     }
 }
