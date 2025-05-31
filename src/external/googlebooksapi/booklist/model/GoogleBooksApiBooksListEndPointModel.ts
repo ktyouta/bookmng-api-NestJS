@@ -39,7 +39,6 @@ export class GoogleBooksApiBooksListEndPointModel {
         }
 
         this._url = `${GoogleBooksApiBooksListEndPointModel.PATH}${query ? `?${query}` : ``}`;
-        console.log(`url:${this._url}`);
     }
 
     get url() {
