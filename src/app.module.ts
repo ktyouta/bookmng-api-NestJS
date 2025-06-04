@@ -19,6 +19,7 @@ import { FrontUserLoginModule } from './frontuserlogin/module/front-user-login.m
 import { CreateBookshelfModule } from './createbookshelf/module/create-bookshelf.module';
 import { GetBookshelfListModule } from './getbookshelflist/module/get-bookshelf-list.module';
 import { FrontUserCheckAuthModule } from './frontusercheckauth/module/front-user-check-auth.module';
+import { FrontUserLogoutModule } from './frontuserlogout/module/front-user-logout.module';
 
 
 dotenv.config();
@@ -38,6 +39,8 @@ dotenv.config();
     CreateFrontUserModule,
     // ログイン(フロント)
     FrontUserLoginModule,
+    // ログアウト(フロント)
+    FrontUserLogoutModule,
     // 本棚情報登録
     CreateBookshelfModule,
     // 本棚情報取得

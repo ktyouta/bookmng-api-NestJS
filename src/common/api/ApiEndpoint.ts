@@ -10,6 +10,8 @@ export enum ApiEndopoint {
     FRONT_USER = "frontuser",
     // ログイン(フロント)
     FRONT_USER_LOGIN = "frontuserlogin",
+    // ログアウト(フロント)
+    FRONT_USER_LOGOUT = "frontuserlogout",
     // 認証
     FRONT_USER_CHECK_AUTH = "frontusercheckauth",
     // 本棚情報
