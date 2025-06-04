@@ -131,9 +131,10 @@ export class JsonWebTokenUserModel {
         const password = frontUserInfoCreateSelectEntity.frontUserPassword;
 
         // ユーザー情報を取得
-        const frontUserList = await this.entityManager.query(
+        const frontUserList: FrontUserInfoType[] = await this.entityManager.query(
             `SELECT 
-                    *
+                    a.user_name as "userName",
+                    b.user_birthday as "birthday"
                 FROM 
                     bookmng.front_user_login_master a 
                 INNER JOIN 

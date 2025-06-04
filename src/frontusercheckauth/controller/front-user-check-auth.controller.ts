@@ -11,6 +11,9 @@ import { NewJsonWebTokenModel } from "src/jsonwebtoken/model/NewJsonWebTokenMode
 import { CookieCheckGuard } from "src/guard/cookie-check.guard";
 import { JsonWebTokenUserModel } from "src/jsonwebtoken/model/JsonWebTokenUserModel";
 import { Request } from 'express';
+import { FrontUserInfoMaster } from "src/entities/FrontUserInfoMaster";
+import { SaveOptions, RemoveOptions } from "typeorm";
+import { FrontUserCheckAuthModel } from "../model/front-user-check-auth.model";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -36,10 +39,13 @@ export class FrontUserCheckAuthController {
         // cookieを返却
         res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
+        // レスポンスのユーザー情報
+        const userInfoModel = new FrontUserCheckAuthModel(jsonWebTokenUserModel);
+
         return ApiResponse.create(
             HttpStatus.HTTP_STATUS_OK,
             `認証に成功しました`,
-            newJsonWebTokenModel.token,
+            userInfoModel,
         );
     }
 }
