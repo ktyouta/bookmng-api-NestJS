@@ -16,4 +16,6 @@ export enum ApiEndopoint {
     FRONT_USER_CHECK_AUTH = "frontusercheckauth",
     // 本棚情報
     BOOKSHELF = "bookshelf",
+    // 本棚情報詳細
+    BOOKSHELF_ID = "bookshelf/:id",
 }
