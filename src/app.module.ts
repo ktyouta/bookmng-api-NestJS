@@ -22,6 +22,7 @@ import { FrontUserCheckAuthModule } from './frontusercheckauth/module/front-user
 import { FrontUserLogoutModule } from './frontuserlogout/module/front-user-logout.module';
 import { GetBookshelfDetailModule } from './getbookshelfdetail/module/get-bookshelf-detail.module';
 import { UpdateBookshelfSummaryModule } from './updatebookshelfsummary/module/update-bookshelf-summary.module';
+import { UpdateBookshelfReviewModule } from './updatebookshelfreview/module/update-bookshelf-review.module';
 
 
 dotenv.config();
@@ -53,6 +54,8 @@ dotenv.config();
     FrontUserCheckAuthModule,
     // 要約更新
     UpdateBookshelfSummaryModule,
+    // レビュー更新
+    UpdateBookshelfReviewModule,
   ],
   controllers: [
     AppController,

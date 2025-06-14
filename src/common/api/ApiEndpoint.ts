@@ -18,4 +18,8 @@ export enum ApiEndopoint {
     BOOKSHELF = "bookshelf",
     // 本棚情報詳細
     BOOKSHELF_ID = "bookshelf/:id",
+    // 本棚要約
+    BOOKSHELF_SUMMARY_ID = "bookshelfsummary/:id",
+    // 本棚レビュー
+    BOOKSHELF_REVIEW_ID = "bookshelfreview/:id",
 }

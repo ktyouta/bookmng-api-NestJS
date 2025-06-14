@@ -3,22 +3,10 @@ import { GoogleBooksApiBookDetailModel } from "src/external/googlebooksapi/bookd
 import { GoogleBooksDetailResponseType } from "src/external/googlebooksapi/bookdetail/type/GoogleBooksDetailResponseType";
 import { GoogleBooksApiBookListModel } from "src/external/googlebooksapi/booklist/model/GoogleBooksApiBookListModel";
 import { GoogleBooksAPIsModelType } from "src/external/googlebooksapi/booklist/type/GoogleBooksAPIsModelType";
-import { UpdateBookshelfSummaryResponseType } from "../type/update-bookshelf-summary-response.type";
+import { IsString } from "class-validator";
 
-export class UpdateBookshelfSummaryResponse {
+export class UpdateBookshelfReviewRequestDto {
 
-    private readonly _data: UpdateBookshelfSummaryResponseType;
-
-    constructor(bookshelf: BookshelfTransaction,
-        googleBooksApiBookDetailModel: GoogleBooksApiBookDetailModel) {
-
-        this._data = {
-            ...googleBooksApiBookDetailModel.response,
-            ...bookshelf
-        };
-    }
-
-    get data() {
-        return this._data;
-    }
+    @IsString()
+    review: string;
 }

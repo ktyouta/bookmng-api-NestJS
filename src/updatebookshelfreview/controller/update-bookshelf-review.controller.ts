@@ -4,24 +4,24 @@ import { GoogleBooksApiBookListKeyword } from "src/external/googlebooksapi/bookl
 import { HttpStatus } from "src/common/const/HttpStatusConst";
 import { ApiResponse } from "src/common/api/ApiResponse";
 import { GoogleBooksApiBooksDeitalBookIdModel } from "src/external/googlebooksapi/bookdetail/properties/GoogleBooksApiBooksDeitalBookIdModel";
-import { UpdateBookshelfSummaryService } from "../service/update-bookshelf-summary.service";
 import { CookieCheckGuard } from "src/guard/cookie-check.guard";
 import { JsonWebTokenUserModel } from "src/jsonwebtoken/model/JsonWebTokenUserModel";
 import { Request } from 'express';
-import { UpdateBookshelfSummaryRequestDto } from "../dto/update-bookshelf-summary-request.dto";
-import { SummaryModel } from "../model/summary.model";
+import { UpdateBookshelfReviewService } from "../service/update-bookshelf-review.service";
+import { UpdateBookshelfReviewRequestDto } from "../dto/update-bookshelf-review-request.dto";
+import { ReviewModel } from "../model/review.model";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
-export class UpdateBookshelfSummaryController {
+export class UpdateBookshelfReviewController {
 
-    constructor(private readonly pdateBookshelfSummaryService: UpdateBookshelfSummaryService,) { }
+    constructor(private readonly pdateBookshelfReviewService: UpdateBookshelfReviewService,) { }
 
     @UseGuards(CookieCheckGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    @Put(ApiEndopoint.BOOKSHELF_SUMMARY_ID)
+    @Put(ApiEndopoint.BOOKSHELF_REVIEW_ID)
     async execute(@Param('id') id: string,
-        @Body() requestDto: UpdateBookshelfSummaryRequestDto,
+        @Body() requestDto: UpdateBookshelfReviewRequestDto,
         @Req() req: Request,) {
 
         // jwt認証
@@ -29,25 +29,25 @@ export class UpdateBookshelfSummaryController {
         const userIdModel = jsonWebTokenUserModel.frontUserIdModel;
 
         const bookIdModel = new GoogleBooksApiBooksDeitalBookIdModel(id);
-        const summaryModel = new SummaryModel(requestDto);
+        const reviewModel = new ReviewModel(requestDto);
 
-        // 要約を更新
-        const result = await this.pdateBookshelfSummaryService.updateSummary(
+        // レビューを更新
+        const result = await this.pdateBookshelfReviewService.updateReview(
             userIdModel,
             bookIdModel,
-            summaryModel,
+            reviewModel,
         );
 
         const updateCount = result.affected;
 
         if (!updateCount || updateCount === 0) {
-            throw Error(`要約の更新に失敗しました。`);
+            throw Error(`レビューの更新に失敗しました。`);
         }
 
         return ApiResponse.create(
             HttpStatus.HTTP_STATUS_OK,
-            `要約の更新に成功しました`,
-            summaryModel.summary
+            `レビューの更新に成功しました`,
+            reviewModel.review
         );
     }
 }
