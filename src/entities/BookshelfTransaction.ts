@@ -11,8 +11,8 @@ export class BookshelfTransaction extends BaseEntity {
     @Column({ type: 'text', name: 'review', nullable: true })
     review?: string;
 
-    @Column({ type: 'text', name: 'highlights', nullable: true })
-    highlights?: string;
+    @Column({ type: 'text', name: 'summary', nullable: true })
+    summary?: string;
 
     @Column({ type: 'varchar', length: 1, name: 'delete_flg' })
     deleteFlg!: string;

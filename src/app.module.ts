@@ -21,6 +21,7 @@ import { GetBookshelfListModule } from './getbookshelflist/module/get-bookshelf-
 import { FrontUserCheckAuthModule } from './frontusercheckauth/module/front-user-check-auth.module';
 import { FrontUserLogoutModule } from './frontuserlogout/module/front-user-logout.module';
 import { GetBookshelfDetailModule } from './getbookshelfdetail/module/get-bookshelf-detail.module';
+import { UpdateBookshelfSummaryModule } from './updatebookshelfsummary/module/update-bookshelf-summary.module';
 
 
 dotenv.config();
@@ -50,6 +51,8 @@ dotenv.config();
     GetBookshelfDetailModule,
     // 認証
     FrontUserCheckAuthModule,
+    // 要約更新
+    UpdateBookshelfSummaryModule,
   ],
   controllers: [
     AppController,
