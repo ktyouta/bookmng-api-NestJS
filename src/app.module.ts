@@ -23,6 +23,7 @@ import { FrontUserLogoutModule } from './frontuserlogout/module/front-user-logou
 import { GetBookshelfDetailModule } from './getbookshelfdetail/module/get-bookshelf-detail.module';
 import { UpdateBookshelfSummaryModule } from './updatebookshelfsummary/module/update-bookshelf-summary.module';
 import { UpdateBookshelfReviewModule } from './updatebookshelfreview/module/update-bookshelf-review.module';
+import { GetReadStatusListModule } from './getraedstatuslist/module/get-read-status-list.module';
 
 
 dotenv.config();
@@ -56,6 +57,8 @@ dotenv.config();
     UpdateBookshelfSummaryModule,
     // レビュー更新
     UpdateBookshelfReviewModule,
+    // 読書状況一覧取得
+    GetReadStatusListModule,
   ],
   controllers: [
     AppController,

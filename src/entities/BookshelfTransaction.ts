@@ -14,6 +14,21 @@ export class BookshelfTransaction extends BaseEntity {
     @Column({ type: 'text', name: 'summary', nullable: true })
     summary?: string;
 
+    @Column({ type: 'varchar', length: 2, name: 'read_status', nullable: true })
+    readStatus?: string;
+
+    @Column({ type: 'varchar', length: 8, name: 'start_date', nullable: true })
+    startDate?: string;
+
+    @Column({ type: 'varchar', length: 8, name: 'end_date', nullable: true })
+    endDate?: string;
+
+    @Column({ type: 'varchar', length: 8, name: 'favorite_level', nullable: true })
+    favoriteLevel?: string;
+
+    @Column({ type: 'varchar', length: 8, name: 'purchase_level', nullable: true })
+    purchaseDate?: string;
+
     @Column({ type: 'varchar', length: 1, name: 'delete_flg' })
     deleteFlg!: string;
 
