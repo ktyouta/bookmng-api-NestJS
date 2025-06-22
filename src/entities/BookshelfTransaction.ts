@@ -23,8 +23,8 @@ export class BookshelfTransaction extends BaseEntity {
     @Column({ type: 'varchar', length: 8, name: 'end_date', nullable: true })
     endDate?: string;
 
-    @Column({ type: 'varchar', length: 8, name: 'favorite_level', nullable: true })
-    favoriteLevel?: string;
+    @Column({ type: 'int', name: 'favorite_level', nullable: true })
+    favoriteLevel?: number;
 
     @Column({ type: 'varchar', length: 8, name: 'purchase_level', nullable: true })
     purchaseDate?: string;
