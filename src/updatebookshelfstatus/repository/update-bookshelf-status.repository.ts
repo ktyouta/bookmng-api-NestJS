@@ -34,7 +34,7 @@ export class UpdateBookshelfStatusRepository {
         const favoriteLevel = updateBookshelfStatusEntity.favoriteLevel;
 
         // ステータスを更新
-        const bookshelf = await this.bookshelfTransactionRepository.update(
+        const result = await this.bookshelfTransactionRepository.update(
             {
                 userId,
                 bookId
@@ -46,6 +46,19 @@ export class UpdateBookshelfStatusRepository {
                 purchaseDate: purchaseDate,
                 favoriteLevel: favoriteLevel,
             });
+
+        const updateCount = result.affected;
+
+        if (!updateCount || updateCount === 0) {
+            throw Error(`書籍ステータスの更新に失敗しました。`);
+        }
+
+        const bookshelf = await this.bookshelfTransactionRepository.findOneBy(
+            {
+                userId,
+                bookId
+            }
+        );
 
         return bookshelf;
     }

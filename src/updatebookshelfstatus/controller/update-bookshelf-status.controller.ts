@@ -46,9 +46,7 @@ export class UpdateBookshelfStatusController {
                 updateBookshelfStatusRequestModel,
             );
 
-            const updateCount = result.affected;
-
-            if (!updateCount || updateCount === 0) {
+            if (!result) {
                 throw Error(`書籍ステータスの更新に失敗しました。`);
             }
 
@@ -58,6 +56,7 @@ export class UpdateBookshelfStatusController {
             return ApiResponse.create(
                 HttpStatus.HTTP_STATUS_OK,
                 `ステータスの更新に成功しました`,
+                result,
             );
 
         } catch (e) {
