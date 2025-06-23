@@ -20,7 +20,7 @@ export class UpdateBookshelfStatusController {
     constructor(private readonly updateBookshelfStatusService: UpdateBookshelfStatusService,) { }
 
     @UseGuards(CookieCheckGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true }))
+    @UsePipes(new ValidationPipe({ whitelist: true, transform: true, }))
     @Put(ApiEndopoint.BOOKSHELF_STATUS_ID)
     async execute(@Param('id') id: string,
         @Body() requestDto: UpdateBookshelfStatusRequestDto,

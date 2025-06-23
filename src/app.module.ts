@@ -24,6 +24,7 @@ import { GetBookshelfDetailModule } from './getbookshelfdetail/module/get-booksh
 import { UpdateBookshelfSummaryModule } from './updatebookshelfsummary/module/update-bookshelf-summary.module';
 import { UpdateBookshelfReviewModule } from './updatebookshelfreview/module/update-bookshelf-review.module';
 import { GetReadStatusListModule } from './getraedstatuslist/module/get-read-status-list.module';
+import { UpdateBookshelfStatusModule } from './updatebookshelfstatus/module/update-bookshelf-status.module';
 
 
 dotenv.config();
@@ -59,6 +60,8 @@ dotenv.config();
     UpdateBookshelfReviewModule,
     // 読書状況一覧取得
     GetReadStatusListModule,
+    // 書籍ステータス更新
+    UpdateBookshelfStatusModule,
   ],
   controllers: [
     AppController,
