@@ -8,6 +8,7 @@ import { Request } from 'express';
 import { GetBookshelfListService } from "../service/get-bookshelf-list.service";
 import { GetBookshelfListRequestDto } from "../dto/get-bookshelf-list-request.dto";
 import { CookieCheckGuard } from "src/guard/cookie-check.guard";
+import { GetBookshelfListRequestModel } from "../model/get-bookshelf-list-request.model";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -26,8 +27,13 @@ export class GetBookshelfListController {
         const jsonWebTokenUserModel = await JsonWebTokenUserModel.get(req);
         const userIdModel = jsonWebTokenUserModel.frontUserIdModel;
 
+        const getBookshelfListRequestModel = new GetBookshelfListRequestModel(requestDto);
+
         // 本棚情報一覧を取得する
-        const bookshelfList = await this.getBookshelfListService.getBookshelfList(userIdModel);
+        const bookshelfList = await this.getBookshelfListService.getBookshelfList(
+            userIdModel,
+            getBookshelfListRequestModel
+        );
 
         // 本棚情報をもとにGoogle Books APIから書籍情報を取得
         const bookshelfListMergedList = await this.getBookshelfListService.mergeGoogleBooksInfo(bookshelfList);

@@ -26,7 +26,7 @@ export class BookshelfTransaction extends BaseEntity {
     @Column({ type: 'int', name: 'favorite_level', nullable: true })
     favoriteLevel?: number;
 
-    @Column({ type: 'varchar', length: 8, name: 'purchase_level', nullable: true })
+    @Column({ type: 'varchar', length: 8, name: 'purchase_date', nullable: true })
     purchaseDate?: string;
 
     @Column({ type: 'varchar', length: 1, name: 'delete_flg' })

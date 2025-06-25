@@ -14,6 +14,8 @@ import { GoogleBooksApiBookDetailModel } from 'src/external/googlebooksapi/bookd
 import { GetBookshelfResponseType } from '../type/get-bookshelf-response.type';
 import { GetBookshelfListRepository } from '../repository/get-bookshelf-list.repository';
 import { GetBookshelfListSelectBookshelfEntity } from '../entity/get-bookshelf-list-select-bookshelf.entity';
+import { GetBookshelfListRequestModel } from '../model/get-bookshelf-list-request.model';
+import { BookshelfType } from '../type/bookshelf.type';
 
 @Injectable()
 export class GetBookshelfListService {
@@ -24,9 +26,14 @@ export class GetBookshelfListService {
      * 本棚情報一覧を取得
      * @param userIdModel 
      */
-    async getBookshelfList(userIdModel: FrontUserIdModel) {
+    async getBookshelfList(userIdModel: FrontUserIdModel,
+        getBookshelfListRequestModel: GetBookshelfListRequestModel,
+    ) {
 
-        const getBookshelfSelectBookshelfEntity = new GetBookshelfListSelectBookshelfEntity(userIdModel);
+        const getBookshelfSelectBookshelfEntity = new GetBookshelfListSelectBookshelfEntity(
+            userIdModel,
+            getBookshelfListRequestModel
+        );
 
         const bookshelfList = await this.getBookshelfRepository.getBookshelfList(getBookshelfSelectBookshelfEntity);
 
@@ -38,9 +45,9 @@ export class GetBookshelfListService {
      * 本棚情報をもとにGoogle Books APIから書籍情報を取得
      * @param bookshelfList 
      */
-    async mergeGoogleBooksInfo(bookshelfList: BookshelfTransaction[]) {
+    async mergeGoogleBooksInfo(bookshelfList: BookshelfType[]) {
 
-        const mergedBookshelfList: GetBookshelfResponseType[] = await Promise.all(bookshelfList.map(async (e: BookshelfTransaction) => {
+        const mergedBookshelfList: GetBookshelfResponseType[] = await Promise.all(bookshelfList.map(async (e: BookshelfType) => {
 
             const googleBooksApiBooksDeitalBookIdModel = new GoogleBooksApiBooksDeitalBookIdModel(e.bookId);
             const googleBooksApiBooksDeitalEndPointModel = new GoogleBooksApiBooksDeitalEndPointModel(googleBooksApiBooksDeitalBookIdModel);
