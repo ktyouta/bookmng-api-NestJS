@@ -16,7 +16,6 @@ export class GetBookshelfListRepository {
 
     constructor(
         @InjectRepository(BookshelfTransaction)
-        private readonly bookshelfTransactionRepository: Repository<BookshelfTransaction>,
         private readonly entityManager: EntityManager,
     ) { }
 
@@ -31,7 +30,7 @@ export class GetBookshelfListRepository {
         const readStatus = getBookshelfListSelectBookshelfEntity.readStatus;
         const favoriteLevel = getBookshelfListSelectBookshelfEntity.favoriteLevel;
 
-        // // 本棚情報を取得
+        // 本棚情報を取得
         const params: unknown[] = [userId];
         let paramIndex = 2;
         let query = `

@@ -1,3 +1,4 @@
+import { BookshelfMemoTransaction } from "./BookshelfMemoTransaction";
 import { BookshelfTransaction } from "./BookshelfTransaction";
 import { FrontUserInfoMaster } from "./FrontUserInfoMaster";
 import { FrontUserLoginMaster } from "./FrontUserLoginMaster";
@@ -19,4 +20,6 @@ export const ENTITIES_LIST = [
     BookshelfTransaction,
     // 読書状況マスタ
     ReadStatusMaster,
+    // 本棚メモ
+    BookshelfMemoTransaction,
 ];
