@@ -27,5 +27,7 @@ export enum ApiEndopoint {
     // 本棚ステータス
     BOOKSHELF_STATUS_ID = "bookshelfstatus/:id",
     // 本棚メモ
-    BOOKSHELF_MEMO = "bookshelfmemo",
+    BOOKSHELF_MEMO = "bookshelf/:bookId/memo",
+    // 本棚メモ
+    BOOKSHELF_MEMO_ID = "bookshelf/:bookId/memo/:memoId",
 }

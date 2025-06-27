@@ -21,19 +21,6 @@ export class UpdateBookshelfStatusService {
     constructor(private readonly updateBookshelfStatusRepository: UpdateBookshelfStatusRepository) { }
 
     /**
-     * Google Books APIから書籍詳細を取得
-     * @returns 
-     */
-    async getApiBookInfo(googleBooksApiBooksDeitalBookIdModel: GoogleBooksApiBooksDeitalBookIdModel): Promise<GoogleBooksApiBookDetailModel> {
-
-        const googleBooksApiBooksDeitalEndPointModel = new GoogleBooksApiBooksDeitalEndPointModel(googleBooksApiBooksDeitalBookIdModel);
-
-        const result = await GoogleBooksApiBookDetailModel.call(googleBooksApiBooksDeitalEndPointModel);
-
-        return result;
-    }
-
-    /**
      * ステータスを更新
      * @param bookIdModel 
      * @param statusModel 
