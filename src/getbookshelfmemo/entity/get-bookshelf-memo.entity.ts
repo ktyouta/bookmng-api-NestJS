@@ -4,25 +4,21 @@ import { FrontUserIdModel } from "src/internal/common/FrontUserIdModel";
 import { FrontUserNameModel } from "src/internal/frontuserinfomaster/FrontUserNameModel";
 import { FrontUserPasswordModel } from "src/internal/frontuserloginmaster/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "src/internal/frontuserloginmaster/FrontUserSaltValueModel";
-import { MemoIdModel } from "../model/memo-id.model";
 
-export class DeleteBookshelfMemoEntity {
+
+export class GetBookshelfMemoEntity {
 
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
     // 書籍ID
     private readonly _bookIdModel: BookIdModel;
-    // メモID
-    private readonly _memoIdModel: MemoIdModel;
 
     constructor(frontUserIdModel: FrontUserIdModel,
         bookIdModel: BookIdModel,
-        memoIdModel: MemoIdModel,
     ) {
 
         this._frontUserIdModel = frontUserIdModel;
         this._bookIdModel = bookIdModel;
-        this._memoIdModel = memoIdModel;
     }
 
     get frontUserId() {
@@ -31,9 +27,5 @@ export class DeleteBookshelfMemoEntity {
 
     get bookId() {
         return this._bookIdModel.bookId;
-    }
-
-    get memoId() {
-        return this._memoIdModel.memoId;
     }
 }

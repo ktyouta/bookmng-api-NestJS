@@ -55,7 +55,7 @@ export class DeleteBookshelfMemoController {
                 memoIdModel,
             );
 
-            if (!result || result.affected == 0) {
+            if (!result) {
                 throw Error(`メモの削除に失敗しました。`);
             }
 

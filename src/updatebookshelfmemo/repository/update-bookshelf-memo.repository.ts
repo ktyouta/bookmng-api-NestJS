@@ -72,7 +72,7 @@ export class UpdateBookshelfMemoRepository {
             throw Error(`書籍メモの更新に失敗しました。`);
         }
 
-        const bookshelf = await this.bookshelfMemoTransactionRepository.findOneBy(
+        const bookshelfMemo = await this.bookshelfMemoTransactionRepository.findOneBy(
             {
                 userId,
                 bookId,
@@ -80,6 +80,6 @@ export class UpdateBookshelfMemoRepository {
             }
         );
 
-        return bookshelf;
+        return bookshelfMemo;
     }
 }

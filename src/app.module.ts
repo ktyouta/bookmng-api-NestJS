@@ -23,11 +23,12 @@ import { FrontUserLogoutModule } from './frontuserlogout/module/front-user-logou
 import { GetBookshelfDetailModule } from './getbookshelfdetail/module/get-bookshelf-detail.module';
 import { UpdateBookshelfSummaryModule } from './updatebookshelfsummary/module/update-bookshelf-summary.module';
 import { UpdateBookshelfReviewModule } from './updatebookshelfreview/module/update-bookshelf-review.module';
-import { GetReadStatusListModule } from './getraedstatuslist/module/get-read-status-list.module';
+import { GetReadStatusListModule } from './getreadstatuslist/module/get-read-status-list.module';
 import { UpdateBookshelfStatusModule } from './updatebookshelfstatus/module/update-bookshelf-status.module';
 import { CreateBookshelfMemoModule } from './createbookshelfmemo/module/create-bookshelf-memo.module';
 import { UpdateBookshelfMemoModule } from './updatebookshelfmemo/module/update-bookshelf-memo.module';
 import { DeleteBookshelfMemoModule } from './deletebookshelfmemo/module/delete-bookshelf-memo.module';
+import { GetBookshelfMemoModule } from './getbookshelfmemo/module/get-bookshelf-memo.module';
 
 
 dotenv.config();
@@ -71,6 +72,8 @@ dotenv.config();
     UpdateBookshelfMemoModule,
     // 書籍メモ削除
     DeleteBookshelfMemoModule,
+    // 書籍メモ取得
+    GetBookshelfMemoModule,
   ],
   controllers: [
     AppController,

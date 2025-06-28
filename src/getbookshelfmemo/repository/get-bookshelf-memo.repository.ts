@@ -6,14 +6,14 @@ import { Repository } from "typeorm";
 import { DeleteFlgModel } from "src/internal/common/DeleteFlgModel";
 import { BookshelfTransaction } from "src/entities/BookshelfTransaction";
 import { CreateBookshelfSelectBookshelfEntity } from "src/createbookshelf/entity/create-bookshelf-select-bookshelf.entity";
-import { DeleteBookshelfMemoEntity } from "../entity/delete-bookshelf-memo.entity";
-import { DeleteBookshelfMemoSelectBookshelfEntity } from "../entity/delete-bookshelf-memo-select-bookshelf.entity";
+import { GetBookshelfMemoEntity } from "../entity/get-bookshelf-memo.entity";
+import { GetBookshelfMemoSelectBookshelfEntity } from "../entity/get-bookshelf-memo-select-bookshelf.entity";
 import { BookshelfMemoTransaction } from "src/entities/BookshelfMemoTransaction";
 import { FLG } from "src/common/const/CommonConst";
 
 
 @Injectable()
-export class DeleteBookshelfMemoRepository {
+export class GetBookshelfMemoRepository {
 
 
     constructor(
@@ -25,13 +25,13 @@ export class DeleteBookshelfMemoRepository {
 
     /**
      * 本棚情報を取得
-     * @param deleteBookshelfMemoSelectBookshelfEntity 
+     * @param getBookshelfMemoSelectBookshelfEntity 
      * @returns 
      */
-    async getBookshelfList(deleteBookshelfMemoSelectBookshelfEntity: DeleteBookshelfMemoSelectBookshelfEntity) {
+    async getBookshelfList(getBookshelfMemoSelectBookshelfEntity: GetBookshelfMemoSelectBookshelfEntity) {
 
-        const userId = deleteBookshelfMemoSelectBookshelfEntity.frontUserId;
-        const bookId = deleteBookshelfMemoSelectBookshelfEntity.bookId;
+        const userId = getBookshelfMemoSelectBookshelfEntity.frontUserId;
+        const bookId = getBookshelfMemoSelectBookshelfEntity.bookId;
 
         // 本棚情報を取得
         const bookshelfList = await this.bookshelfTransactionRepository.find({
@@ -45,41 +45,24 @@ export class DeleteBookshelfMemoRepository {
     }
 
     /**
-     * メモを削除
+     * メモを取得
      * @param getBookshelfListSelectBookshelfEntity 
      * @returns 
      */
-    async deleteMemo(deleteBookshelfMemoEntity: DeleteBookshelfMemoEntity) {
+    async getMemo(getBookshelfMemoEntity: GetBookshelfMemoEntity) {
 
-        const userId = deleteBookshelfMemoEntity.frontUserId;
-        const bookId = deleteBookshelfMemoEntity.bookId;
-        const memoId = deleteBookshelfMemoEntity.memoId;
+        const userId = getBookshelfMemoEntity.frontUserId;
+        const bookId = getBookshelfMemoEntity.bookId;
 
-        // メモを削除
-        const result = await this.bookshelfMemoTransactionRepository.update(
-            {
+        // メモを取得
+        const result = await this.bookshelfMemoTransactionRepository.find({
+            where: {
                 userId,
                 bookId,
-                seq: memoId
-            },
-            {
-                deleteFlg: FLG.ON,
-            });
-
-        const updateCount = result.affected;
-
-        if (!updateCount || updateCount === 0) {
-            throw Error(`書籍メモの更新に失敗しました。`);
-        }
-
-        const bookshelfMemo = await this.bookshelfMemoTransactionRepository.findOneBy(
-            {
-                userId,
-                bookId,
-                seq: memoId
+                deleteFlg: FLG.OFF
             }
-        );
+        });
 
-        return bookshelfMemo;
+        return result;
     }
 }
