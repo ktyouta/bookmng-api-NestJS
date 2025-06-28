@@ -9,19 +9,18 @@ import { GoogleBooksApiBookListModel } from 'src/external/googlebooksapi/booklis
 import { GoogleBooksApiBooksListEndPointModel } from 'src/external/googlebooksapi/booklist/model/GoogleBooksApiBooksListEndPointModel';
 import { GoogleBooksApiBookListKeyword } from 'src/external/googlebooksapi/booklist/properties/GoogleBooksApiBookListKeyword';
 import { EntityManager, Repository } from 'typeorm';
-import { UpdateBookshelfMemoRepository } from '../repository/update-bookshelf-memo.repository';
+import { DeleteBookshelfMemoRepository } from '../repository/delete-bookshelf-memo.repository';
 import { FrontUserIdModel } from 'src/internal/common/FrontUserIdModel';
-import { UpdateBookshelfMemoEntity } from '../entity/update-bookshelf-memo.entity';
-import { UpdateBookshelfMemoRequestModel } from '../model/update-bookshelf-memo.request.model';
+import { DeleteBookshelfMemoEntity } from '../entity/delete-bookshelf-memo.entity';
 import { MemoIdModel } from '../model/memo-id.model';
-import { UpdateBookshelfMemoSelectBookshelfEntity } from '../entity/update-bookshelf-memo-select-bookshelf.entity';
+import { DeleteBookshelfMemoSelectBookshelfEntity } from '../entity/delete-bookshelf-memo-select-bookshelf.entity';
 import { BookIdModel } from 'src/internal/bookshelftransaction/BookIdModel';
 
 
 @Injectable()
-export class UpdateBookshelfMemoService {
+export class DeleteBookshelfMemoService {
 
-    constructor(private readonly updateBookshelfMemoRepository: UpdateBookshelfMemoRepository) { }
+    constructor(private readonly deleteBookshelfMemoRepository: DeleteBookshelfMemoRepository) { }
 
     /**
      * 本棚情報を取得
@@ -33,34 +32,33 @@ export class UpdateBookshelfMemoService {
         bookIdModel: BookIdModel,
     ) {
 
-        const updateBookshelfMemoSelectBookshelfEntity = new UpdateBookshelfMemoSelectBookshelfEntity(
+        const deleteBookshelfMemoSelectBookshelfEntity = new DeleteBookshelfMemoSelectBookshelfEntity(
             userIdModel,
             bookIdModel
         );
 
-        const bookshelfList = await this.updateBookshelfMemoRepository.getBookshelfList(updateBookshelfMemoSelectBookshelfEntity);
+        const bookshelfList = await this.deleteBookshelfMemoRepository.getBookshelfList(deleteBookshelfMemoSelectBookshelfEntity);
 
         return bookshelfList;
     }
 
     /**
-     * ステータスを更新
+     * ステータスを削除
      * @param bookIdModel 
      * @param statusModel 
      */
-    async updateMemo(userIdModel: FrontUserIdModel,
+    async deleteMemo(userIdModel: FrontUserIdModel,
         bookIdModel: BookIdModel,
         memoIdModel: MemoIdModel,
-        updateBookshelfMemoRequestModel: UpdateBookshelfMemoRequestModel) {
+    ) {
 
-        const updateBookshelfMemoEntity = new UpdateBookshelfMemoEntity(
+        const deleteBookshelfMemoEntity = new DeleteBookshelfMemoEntity(
             userIdModel,
             bookIdModel,
             memoIdModel,
-            updateBookshelfMemoRequestModel.memoModel,
         );
 
-        const result = await this.updateBookshelfMemoRepository.updateMemo(updateBookshelfMemoEntity);
+        const result = await this.deleteBookshelfMemoRepository.deleteMemo(deleteBookshelfMemoEntity);
 
         return result;
     }

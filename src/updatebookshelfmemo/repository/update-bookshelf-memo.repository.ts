@@ -48,7 +48,7 @@ export class UpdateBookshelfMemoRepository {
      * @param getBookshelfListSelectBookshelfEntity 
      * @returns 
      */
-    async updateStatus(updateBookshelfMemoEntity: UpdateBookshelfMemoEntity) {
+    async updateMemo(updateBookshelfMemoEntity: UpdateBookshelfMemoEntity) {
 
         const userId = updateBookshelfMemoEntity.frontUserId;
         const bookId = updateBookshelfMemoEntity.bookId;
