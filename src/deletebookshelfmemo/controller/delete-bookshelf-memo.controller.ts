@@ -20,7 +20,7 @@ export class DeleteBookshelfMemoController {
 
     @UseGuards(CookieCheckGuard)
     @UsePipes(new ValidationPipe({ whitelist: true, transform: true, }))
-    @Put(ApiEndopoint.BOOKSHELF_MEMO_ID)
+    @Delete(ApiEndopoint.BOOKSHELF_MEMO_ID)
     async execute(@Param('bookId') bookId: string,
         @Param('memoId') memoId: string,
         @Req() req: Request,) {
