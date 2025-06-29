@@ -8,5 +8,6 @@ import { Transform } from "class-transformer";
 
 export class UpdateBookshelfMemoRequestDto {
 
+    @IsString()
     memo: string;
 }
