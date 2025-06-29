@@ -8,19 +8,12 @@ import { MemoModel } from "./memo.model";
 
 export class CreateBookshelfMemoRequestModel {
 
-    // 書籍ID
-    private readonly _bookIdModel: BookIdModel;
     // メモ
     private readonly _memoModel: MemoModel;
 
     constructor(createBookshelfMemoRequestDto: CreateBookshelfMemoRequestDto) {
 
-        this._bookIdModel = new BookIdModel(createBookshelfMemoRequestDto.bookId);
         this._memoModel = new MemoModel(createBookshelfMemoRequestDto.memo);
-    }
-
-    get bookIdModel() {
-        return this._bookIdModel;
     }
 
     get memoModel() {

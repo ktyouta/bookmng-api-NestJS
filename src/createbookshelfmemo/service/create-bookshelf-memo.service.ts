@@ -6,6 +6,7 @@ import { CreateBookshelfMemoSelectBookshelfEntity } from "../entity/create-books
 import { CreateBookshelfMemoCreateBookshelfMemoEntity } from "../entity/create-bookshelf-memo-create-bookshelf-memo.entity";
 import { CreateBookshelfMemoSelectBookshelfMemoSeqEntity } from "../entity/create-bookshelf-memo-select-bookshelf-memo-seq.entity";
 import { MemoSeqModel } from "../model/memo-seq.model";
+import { BookIdModel } from "src/internal/bookshelftransaction/BookIdModel";
 
 @Injectable()
 export class CreateBookshelfMemoService {
@@ -18,12 +19,12 @@ export class CreateBookshelfMemoService {
      * @param createBookshelfMemoRequestModel 
      */
     async getBookshelfList(userIdModel: FrontUserIdModel,
-        createBookshelfMemoRequestModel: CreateBookshelfMemoRequestModel
+        bookIdModel: BookIdModel,
     ) {
 
         const createBookshelfMemoSelectBookshelfEntity = new CreateBookshelfMemoSelectBookshelfEntity(
             userIdModel,
-            createBookshelfMemoRequestModel.bookIdModel
+            bookIdModel
         );
 
         const bookshelfList = await this.createBookshelfMemoRepository.getBookshelfList(createBookshelfMemoSelectBookshelfEntity);
@@ -38,12 +39,12 @@ export class CreateBookshelfMemoService {
      * @returns 
      */
     async getNestMemoSeq(frontUserIdModel: FrontUserIdModel,
-        createBookshelfMemoRequestModel: CreateBookshelfMemoRequestModel
+        bookIdModel: BookIdModel,
     ) {
 
         const createBookshelfMemoSelectBookshelfMemoSeqEntity = new CreateBookshelfMemoSelectBookshelfMemoSeqEntity(
             frontUserIdModel,
-            createBookshelfMemoRequestModel.bookIdModel,
+            bookIdModel,
         );
 
         // 本棚メモのシーケンスを取得
@@ -61,23 +62,21 @@ export class CreateBookshelfMemoService {
      * @returns 
      */
     async createBookshelfMemo(frontUserIdModel: FrontUserIdModel,
+        bookIdModel: BookIdModel,
         createBookshelfMemoRequestModel: CreateBookshelfMemoRequestModel,
         memoSeqModel: MemoSeqModel
     ) {
 
         const createBookshelfMemoCreateBookshelfMemoEntity = new CreateBookshelfMemoCreateBookshelfMemoEntity(
             frontUserIdModel,
-            createBookshelfMemoRequestModel.bookIdModel,
+            bookIdModel,
             createBookshelfMemoRequestModel.memoModel,
             memoSeqModel,
         );
 
-        // 本棚メモのシーケンスを取得
-
-
         // 本棚メモ情報を登録
-        const frontUserLoginInfo = await this.createBookshelfMemoRepository.createBookshelfMemo(createBookshelfMemoCreateBookshelfMemoEntity);
+        const bookshelfMemo = await this.createBookshelfMemoRepository.createBookshelfMemo(createBookshelfMemoCreateBookshelfMemoEntity);
 
-        return frontUserLoginInfo;
+        return bookshelfMemo;
     }
 }

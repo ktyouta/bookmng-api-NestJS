@@ -18,8 +18,7 @@ export class GetBookshelfMemoController {
     constructor(private readonly getBookshelfMemoService: GetBookshelfMemoService,) { }
 
     @UseGuards(CookieCheckGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true, transform: true, }))
-    @Delete(ApiEndopoint.BOOKSHELF_MEMO)
+    @Get(ApiEndopoint.BOOKSHELF_MEMO)
     async execute(@Param('bookId') bookId: string,
         @Req() req: Request,) {
 

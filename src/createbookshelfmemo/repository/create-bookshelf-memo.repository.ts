@@ -57,7 +57,7 @@ export class CreateBookshelfMemoRepository {
         const memoSeq = createBookshelfMemoCreateBookshelfMemoEntity.memoSeq;
 
         // 本棚メモ情報作成
-        const bookshelfMemo = await this.bookshelfMemoTransactionRepository.insert({
+        const result = await this.bookshelfMemoTransactionRepository.insert({
             userId,
             bookId,
             seq: memoSeq,
@@ -66,6 +66,14 @@ export class CreateBookshelfMemoRepository {
             updateDate: new Date(),
             deleteFlg: DeleteFlgModel.OFF,
         });
+
+        const bookshelfMemo = await this.bookshelfMemoTransactionRepository.findOneBy(
+            {
+                userId,
+                bookId,
+                seq: memoSeq
+            }
+        );
 
         return bookshelfMemo;
     }
@@ -84,7 +92,7 @@ export class CreateBookshelfMemoRepository {
 
         let query = `
             SELECT 
-                COALESCE(MAX(seq),0) + 1
+                COALESCE(MAX(seq),0) + 1 as next_seq
             FROM 
                 bookmng.bookshelf_memo_transaction  
             WHERE
@@ -93,10 +101,12 @@ export class CreateBookshelfMemoRepository {
         `;
 
         // シーケンスを取得
-        const nextSeq: number = await this.entityManager.query(
+        const result = await this.entityManager.query(
             query,
             params
         );
+
+        const nextSeq: number = result[0].next_seq;
 
         return nextSeq;
     }

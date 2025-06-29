@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Req, Res, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query, Req, Res, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiEndopoint, BOOKMNG_ENDPOINT_PATH } from "src/common/api/ApiEndpoint";
 import { GoogleBooksApiBookListKeyword } from "src/external/googlebooksapi/booklist/properties/GoogleBooksApiBookListKeyword";
 import { HttpStatus } from "src/common/const/HttpStatusConst";
@@ -14,6 +14,7 @@ import { CookieCheckGuard } from "src/guard/cookie-check.guard";
 import { JsonWebTokenUserModel } from "src/jsonwebtoken/model/JsonWebTokenUserModel";
 import { Request } from 'express';
 import { CreateBookshelfMemoRequestModel } from "../model/create-bookshelf-memo-request.model";
+import { BookIdModel } from "src/internal/bookshelftransaction/BookIdModel";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -28,6 +29,7 @@ export class CreateBookshelfMemoController {
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(CreateBookshelfMemoController.ENDPOINT)
     async execute(@Body() requestDto: CreateBookshelfMemoRequestDto,
+        @Param(`bookId`) bookId: string,
         @Req() req: Request,
         @Res({ passthrough: true }) res: Response) {
 
@@ -37,11 +39,12 @@ export class CreateBookshelfMemoController {
 
         // リクエストモデルに変換
         const createBookshelfMemoRequestModel = new CreateBookshelfMemoRequestModel(requestDto);
+        const bookIdModel = new BookIdModel(bookId);
 
         // 書籍の存在チェック
         const bookshelfList = await this.createBookshelfMemoService.getBookshelfList(
             userIdModel,
-            createBookshelfMemoRequestModel
+            bookIdModel,
         );
 
         if (!bookshelfList || bookshelfList.length === 0) {
@@ -57,12 +60,13 @@ export class CreateBookshelfMemoController {
             // 本棚メモ登録用シーケンス番号を取得
             const memoSeqModel = await this.createBookshelfMemoService.getNestMemoSeq(
                 userIdModel,
-                createBookshelfMemoRequestModel
+                bookIdModel
             );
 
             // 本棚メモに登録
             const bookshelf = await this.createBookshelfMemoService.createBookshelfMemo(
                 userIdModel,
+                bookIdModel,
                 createBookshelfMemoRequestModel,
                 memoSeqModel,
             );
