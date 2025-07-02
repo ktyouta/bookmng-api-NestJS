@@ -29,6 +29,7 @@ export class GetBookshelfListRepository {
         const userId = getBookshelfListSelectBookshelfEntity.frontUserId;
         const readStatus = getBookshelfListSelectBookshelfEntity.readStatus;
         const favoriteLevel = getBookshelfListSelectBookshelfEntity.favoriteLevel;
+        const sortKey = getBookshelfListSelectBookshelfEntity.sortKey;
 
         // 本棚情報を取得
         const params: unknown[] = [userId];
@@ -64,6 +65,28 @@ export class GetBookshelfListRepository {
             query += ` AND favorite_level = $${paramIndex}`;
             paramIndex++;
             params.push(favoriteLevel);
+        }
+
+        // ソート
+        switch (sortKey) {
+            case `0`:
+                break;
+            case `1`:
+                break;
+            case `2`:
+                break;
+            case `3`:
+                break;
+            case `4`:
+                break;
+            case `5`:
+                break;
+            case `6`:
+                break;
+            case `7`:
+                break;
+            default:
+                break;
         }
 
         query += ` ORDER BY update_date DESC`;

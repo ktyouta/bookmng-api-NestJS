@@ -4,6 +4,7 @@ import { GoogleBooksApiBookListStartIndexQuery } from "src/external/googlebooksa
 import { GetBookshelfListRequestDto } from "../dto/get-bookshelf-list-request.dto";
 import { ReadStatusModel } from "./read-status.model";
 import { FavoriteLevelModel } from "./favorite-level.model";
+import { SortKeyModel } from "./sort-key.model";
 
 
 export class GetBookshelfListRequestModel {
@@ -12,11 +13,14 @@ export class GetBookshelfListRequestModel {
     private readonly _readStatusModel: ReadStatusModel;
     // お気に入り度
     private readonly _favoriteLevelModel: FavoriteLevelModel;
+    // ソートキー
+    private readonly _sortKeyModel: SortKeyModel;
 
     constructor(getBookshelfListRequestDto: GetBookshelfListRequestDto) {
 
         this._readStatusModel = new ReadStatusModel(getBookshelfListRequestDto.readStatus);
         this._favoriteLevelModel = new FavoriteLevelModel(getBookshelfListRequestDto.favoriteLevel);
+        this._sortKeyModel = new SortKeyModel(getBookshelfListRequestDto.sortKey);
     }
 
     get readStatusModel() {
@@ -25,5 +29,9 @@ export class GetBookshelfListRequestModel {
 
     get favoriteLevelModel() {
         return this._favoriteLevelModel;
+    }
+
+    get sortKeyModel() {
+        return this._sortKeyModel;
     }
 }

@@ -6,6 +6,7 @@ import { FrontUserSaltValueModel } from "src/internal/frontuserloginmaster/Front
 import { GetBookshelfListRequestModel } from "../model/get-bookshelf-list-request.model";
 import { ReadStatusModel } from "../model/read-status.model";
 import { FavoriteLevelModel } from "../model/favorite-level.model";
+import { SortKeyModel } from "../model/sort-key.model";
 
 export class GetBookshelfListSelectBookshelfEntity {
 
@@ -15,6 +16,8 @@ export class GetBookshelfListSelectBookshelfEntity {
     private readonly _readStatusModel: ReadStatusModel;
     // お気に入り度
     private readonly _favoriteLevelModel: FavoriteLevelModel;
+    // ソートキー
+    private readonly _sortKeyModel: SortKeyModel;
 
     constructor(userIdModel: FrontUserIdModel,
         getBookshelfListRequestModel: GetBookshelfListRequestModel
@@ -23,6 +26,7 @@ export class GetBookshelfListSelectBookshelfEntity {
         this._frontUserIdModel = userIdModel;
         this._readStatusModel = getBookshelfListRequestModel.readStatusModel;
         this._favoriteLevelModel = getBookshelfListRequestModel.favoriteLevelModel;
+        this._sortKeyModel = getBookshelfListRequestModel.sortKeyModel;
     }
 
     get frontUserId() {
@@ -35,5 +39,9 @@ export class GetBookshelfListSelectBookshelfEntity {
 
     get favoriteLevel() {
         return this._favoriteLevelModel.favoriteLevel;
+    }
+
+    get sortKey() {
+        return this._sortKeyModel.sortKey;
     }
 }

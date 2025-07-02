@@ -12,4 +12,7 @@ export class GetBookshelfListRequestDto {
         return isNaN(parsed) ? undefined : parsed;
     })
     favoriteLevel?: number;
+
+    @IsOptional()
+    sortKey?: string;
 }
