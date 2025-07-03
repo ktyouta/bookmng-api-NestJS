@@ -13,6 +13,17 @@ import { BookshelfType } from "../type/bookshelf.type";
 @Injectable()
 export class GetBookshelfListRepository {
 
+    // ソートクエリ(メモ登録数)
+    private static readonly SORT_MEMO = `(
+                    SELECT
+                        count(*)
+                    FROM
+                        bookshelf_memo_transaction d
+                    WHERE
+                        d.user_id = $1 AND
+                        d.book_id = a.book_id AND
+                        d.delete_flg = '0'
+                )`;
 
     constructor(
         @InjectRepository(BookshelfTransaction)
@@ -67,29 +78,38 @@ export class GetBookshelfListRepository {
             params.push(favoriteLevel);
         }
 
+        query += ` ORDER BY `
+
         // ソート
         switch (sortKey) {
             case `0`:
+                query += `a.update_date DESC`;
                 break;
             case `1`:
+                query += `a.update_date`;
                 break;
             case `2`:
+                query += `a.create_date DESC`;
                 break;
             case `3`:
+                query += `a.create_date`;
                 break;
             case `4`:
+                query += `${GetBookshelfListRepository.SORT_MEMO} desc, a.update_date DESC`;
                 break;
             case `5`:
+                query += `${GetBookshelfListRepository.SORT_MEMO}, a.update_date DESC`;
                 break;
             case `6`:
+                query += `a.favorite_level desc, a.update_date DESC`;
                 break;
             case `7`:
+                query += `a.favorite_level, a.update_date DESC`;
                 break;
             default:
+                query += `update_date DESC`;
                 break;
         }
-
-        query += ` ORDER BY update_date DESC`;
 
         // 本棚情報を取得
         const bookshelfList: BookshelfType[] = await this.entityManager.query(
