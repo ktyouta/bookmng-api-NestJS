@@ -5,31 +5,31 @@ import { HttpStatus } from "src/common/const/HttpStatusConst";
 import { ApiResponse } from "src/common/api/ApiResponse";
 import { JsonWebTokenUserModel } from "src/jsonwebtoken/model/JsonWebTokenUserModel";
 import { Request } from 'express';
-import { GetReadStatusListService } from "../service/get-read-status-list.service";
-import { GetReadStatusListRequestDto } from "../dto/get-read-status-list-request.dto";
+import { GetBookshelfSortListService } from "../service/get-bookshelf-sort-list.service";
+import { GetBookshelfSortListRequestDto } from "../dto/get-bookshelf-sort-list-request.dto";
 import { CookieCheckGuard } from "src/guard/cookie-check.guard";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
-export class GetReadStatusListController {
+export class GetBookshelfSortListController {
 
-    constructor(private readonly getReadStatusListService: GetReadStatusListService,) { }
+    constructor(private readonly getBookshelfSortListService: GetBookshelfSortListService,) { }
 
     @UseGuards(CookieCheckGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    @Get(ApiEndopoint.READ_STATUS)
+    @Get(ApiEndopoint.BOOKSHELF_SORT_LIST)
     async execute(@Req() req: Request) {
 
         // jwt認証
         await JsonWebTokenUserModel.get(req);
 
-        // 読書状況一覧を取得する
-        const readStatusList = await this.getReadStatusListService.getReadStatusList();
+        // 本棚ソートリストを取得する
+        const bookshelfSortList = await this.getBookshelfSortListService.getBookshelfSortList();
 
         return ApiResponse.create(
             HttpStatus.HTTP_STATUS_OK,
-            `読書状況一覧の取得に成功しました`,
-            readStatusList,
+            `本棚ソートリストの取得に成功しました`,
+            bookshelfSortList,
         );
     }
 }

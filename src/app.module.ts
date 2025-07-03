@@ -29,6 +29,7 @@ import { CreateBookshelfMemoModule } from './createbookshelfmemo/module/create-b
 import { UpdateBookshelfMemoModule } from './updatebookshelfmemo/module/update-bookshelf-memo.module';
 import { DeleteBookshelfMemoModule } from './deletebookshelfmemo/module/delete-bookshelf-memo.module';
 import { GetBookshelfMemoModule } from './getbookshelfmemo/module/get-bookshelf-memo.module';
+import { GetBookshelfSortListModule } from './getbookshelfsortlist/module/get-bookshelf-sort-list.module';
 
 
 dotenv.config();
@@ -74,6 +75,8 @@ dotenv.config();
     DeleteBookshelfMemoModule,
     // 書籍メモ取得
     GetBookshelfMemoModule,
+    // 本棚ソートリスト取得
+    GetBookshelfSortListModule,
   ],
   controllers: [
     AppController,

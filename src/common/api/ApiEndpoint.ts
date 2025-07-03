@@ -30,4 +30,6 @@ export enum ApiEndopoint {
     BOOKSHELF_MEMO = "bookshelf/:bookId/memo",
     // 本棚メモ
     BOOKSHELF_MEMO_ID = "bookshelf/:bookId/memo/:memoId",
+    // 本棚ソートリスト
+    BOOKSHELF_SORT_LIST = "bookshelfsortlist",
 }
