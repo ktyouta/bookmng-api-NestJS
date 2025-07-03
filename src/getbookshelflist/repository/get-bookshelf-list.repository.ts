@@ -18,7 +18,7 @@ export class GetBookshelfListRepository {
                     SELECT
                         count(*)
                     FROM
-                        bookshelf_memo_transaction d
+                        bookmng.bookshelf_memo_transaction d
                     WHERE
                         d.user_id = $1 AND
                         d.book_id = a.book_id AND
@@ -60,7 +60,7 @@ export class GetBookshelfListRepository {
                 create_date as "createDate",
                 update_date as "updateDate"
             FROM 
-                bookmng.bookshelf_transaction  
+                bookmng.bookshelf_transaction a
             WHERE
                 delete_flg = '0' AND
                 user_id = $1
