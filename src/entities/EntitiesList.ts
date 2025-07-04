@@ -5,6 +5,7 @@ import { FrontUserInfoMaster } from "./FrontUserInfoMaster";
 import { FrontUserLoginMaster } from "./FrontUserLoginMaster";
 import { ReadStatusMaster } from "./ReadStatusMaster";
 import { SeqMaster } from "./SeqMaster";
+import { TagMaster } from "./TagMaster";
 import { TestConnection } from "./TestConnection";
 
 // テーブルリスト
@@ -25,4 +26,6 @@ export const ENTITIES_LIST = [
     BookshelfMemoTransaction,
     // 本棚ソートマスタ
     BookshelfSortMaster,
+    // タグマスタ
+    TagMaster,
 ];
