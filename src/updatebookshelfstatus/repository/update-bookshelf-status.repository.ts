@@ -32,7 +32,8 @@ export class UpdateBookshelfStatusRepository {
         const endDate = updateBookshelfStatusEntity.endDate;
         const purchaseDate = updateBookshelfStatusEntity.purchaseDate;
         const favoriteLevel = updateBookshelfStatusEntity.favoriteLevel;
-
+        console.log(`readStatus:${readStatus}`);
+        console.log(`bookId:${bookId}`);
         // ステータスを更新
         const result = await this.bookshelfTransactionRepository.update(
             {

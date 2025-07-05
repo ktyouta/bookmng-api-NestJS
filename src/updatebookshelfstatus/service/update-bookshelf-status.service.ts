@@ -13,6 +13,7 @@ import { UpdateBookshelfStatusRepository } from '../repository/update-bookshelf-
 import { FrontUserIdModel } from 'src/internal/common/FrontUserIdModel';
 import { UpdateBookshelfStatusEntity } from '../entity/update-bookshelf-status.entity';
 import { UpdateBookshelfStatusRequestModel } from '../model/update-bookshelf-status.request.model';
+import { BookIdModel } from 'src/internal/bookshelftransaction/BookIdModel';
 
 
 @Injectable()
@@ -26,7 +27,7 @@ export class UpdateBookshelfStatusService {
      * @param statusModel 
      */
     async updateStatus(userIdModel: FrontUserIdModel,
-        bookIdModel: GoogleBooksApiBooksDeitalBookIdModel,
+        bookIdModel: BookIdModel,
         updateBookshelfStatusRequestModel: UpdateBookshelfStatusRequestModel) {
 
         const updateBookshelfStatusEntity = new UpdateBookshelfStatusEntity(

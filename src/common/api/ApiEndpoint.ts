@@ -25,7 +25,7 @@ export enum ApiEndopoint {
     // 読書状況一覧
     READ_STATUS = "readstatus",
     // 本棚ステータス
-    BOOKSHELF_STATUS_ID = "bookshelfstatus/:id",
+    BOOKSHELF_STATUS = "bookshelf/:bookId/status",
     // 本棚メモ
     BOOKSHELF_MEMO = "bookshelf/:bookId/memo",
     // 本棚メモ

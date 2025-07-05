@@ -17,7 +17,7 @@ export class UpdateBookshelfStatusEntity {
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
     // 書籍ID
-    private readonly _bookIdModel: GoogleBooksApiBooksDeitalBookIdModel;
+    private readonly _bookIdModel: BookIdModel;
     // 読書状況
     private readonly _readStatusModel: ReadStatusModel;
     // 読書開始日
@@ -30,7 +30,7 @@ export class UpdateBookshelfStatusEntity {
     private readonly _favoriteLevelModel: FavoriteLevelModel;
 
     constructor(frontUserIdModel: FrontUserIdModel,
-        bookIdModel: GoogleBooksApiBooksDeitalBookIdModel,
+        bookIdModel: BookIdModel,
         updateBookshelfStatusRequestModel: UpdateBookshelfStatusRequestModel) {
 
         this._frontUserIdModel = frontUserIdModel;
@@ -47,7 +47,7 @@ export class UpdateBookshelfStatusEntity {
     }
 
     get bookId() {
-        return this._bookIdModel.id;
+        return this._bookIdModel.bookId;
     }
 
     get readStatus() {
