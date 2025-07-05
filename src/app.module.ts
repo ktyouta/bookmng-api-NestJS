@@ -31,6 +31,7 @@ import { DeleteBookshelfMemoModule } from './deletebookshelfmemo/module/delete-b
 import { GetBookshelfMemoModule } from './getbookshelfmemo/module/get-bookshelf-memo.module';
 import { GetBookshelfSortListModule } from './getbookshelfsortlist/module/get-bookshelf-sort-list.module';
 import { GetTagListModule } from './gettaglist/module/get-tag-list.module';
+import { GetBookshelfTagModule } from './getbookshelftag/module/get-bookshelf-tag.module';
 
 
 dotenv.config();
@@ -80,6 +81,8 @@ dotenv.config();
     GetBookshelfSortListModule,
     // タグマスタ取得
     GetTagListModule,
+    // 本棚タグ取得
+    GetBookshelfTagModule,
   ],
   controllers: [
     AppController,

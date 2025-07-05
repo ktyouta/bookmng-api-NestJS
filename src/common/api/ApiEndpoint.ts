@@ -34,4 +34,6 @@ export enum ApiEndopoint {
     BOOKSHELF_SORT_LIST = "bookshelfsortlist",
     // タグリスト
     TAG_LIST = "taglist",
+    // 本棚タグ
+    BOOKSHELF_TAG = "bookshelf/:bookId/tag",
 }
