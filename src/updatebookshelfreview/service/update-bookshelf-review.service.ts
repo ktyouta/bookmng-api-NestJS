@@ -13,6 +13,7 @@ import { UpdateBookshelfReviewRepository } from '../repository/update-bookshelf-
 import { FrontUserIdModel } from 'src/internal/common/FrontUserIdModel';
 import { UpdateBookshelfReviewEntity } from '../entity/update-bookshelf-review.entity';
 import { ReviewModel } from '../model/review.model';
+import { BookIdModel } from 'src/internal/bookshelftransaction/BookIdModel';
 
 @Injectable()
 export class UpdateBookshelfReviewService {
@@ -38,7 +39,7 @@ export class UpdateBookshelfReviewService {
      * @param reviewModel 
      */
     async updateReview(userIdModel: FrontUserIdModel,
-        bookIdModel: GoogleBooksApiBooksDeitalBookIdModel,
+        bookIdModel: BookIdModel,
         reviewModel: ReviewModel) {
 
         const updateBookshelfReviewEntity = new UpdateBookshelfReviewEntity(

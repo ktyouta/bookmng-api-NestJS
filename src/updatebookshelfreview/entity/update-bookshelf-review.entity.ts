@@ -11,12 +11,12 @@ export class UpdateBookshelfReviewEntity {
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
     // 書籍ID
-    private readonly _bookIdModel: GoogleBooksApiBooksDeitalBookIdModel;
+    private readonly _bookIdModel: BookIdModel;
     // レビュー
     private readonly _reviewModel: ReviewModel;
 
     constructor(userIdModel: FrontUserIdModel,
-        bookIdModel: GoogleBooksApiBooksDeitalBookIdModel,
+        bookIdModel: BookIdModel,
         reviewModel: ReviewModel) {
 
         this._frontUserIdModel = userIdModel;
@@ -29,7 +29,7 @@ export class UpdateBookshelfReviewEntity {
     }
 
     get bookId() {
-        return this._bookIdModel.id;
+        return this._bookIdModel.bookId;
     }
 
     get review() {

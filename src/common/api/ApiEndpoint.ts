@@ -21,7 +21,7 @@ export enum ApiEndopoint {
     // 本棚要約
     BOOKSHELF_SUMMARY = "bookshelf/:bookId/summary",
     // 本棚レビュー
-    BOOKSHELF_REVIEW_ID = "bookshelfreview/:id",
+    BOOKSHELF_REVIEW = "bookshelf/:bookId/review",
     // 読書状況一覧
     READ_STATUS = "readstatus",
     // 本棚ステータス

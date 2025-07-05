@@ -10,6 +10,7 @@ import { Request } from 'express';
 import { UpdateBookshelfReviewService } from "../service/update-bookshelf-review.service";
 import { UpdateBookshelfReviewRequestDto } from "../dto/update-bookshelf-review-request.dto";
 import { ReviewModel } from "../model/review.model";
+import { BookIdModel } from "src/internal/bookshelftransaction/BookIdModel";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -19,8 +20,8 @@ export class UpdateBookshelfReviewController {
 
     @UseGuards(CookieCheckGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    @Put(ApiEndopoint.BOOKSHELF_REVIEW_ID)
-    async execute(@Param('id') id: string,
+    @Put(ApiEndopoint.BOOKSHELF_REVIEW)
+    async execute(@Param('bookId') bookId: string,
         @Body() requestDto: UpdateBookshelfReviewRequestDto,
         @Req() req: Request,) {
 
@@ -28,7 +29,7 @@ export class UpdateBookshelfReviewController {
         const jsonWebTokenUserModel = await JsonWebTokenUserModel.get(req);
         const userIdModel = jsonWebTokenUserModel.frontUserIdModel;
 
-        const bookIdModel = new GoogleBooksApiBooksDeitalBookIdModel(id);
+        const bookIdModel = new BookIdModel(bookId);
         const reviewModel = new ReviewModel(requestDto);
 
         // レビューを更新
