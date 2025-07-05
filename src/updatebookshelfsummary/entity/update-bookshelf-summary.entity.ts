@@ -11,12 +11,12 @@ export class UpdateBookshelfSummaryEntity {
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
     // 書籍ID
-    private readonly _bookIdModel: GoogleBooksApiBooksDeitalBookIdModel;
+    private readonly _bookIdModel: BookIdModel;
     // 要約
     private readonly _summaryModel: SummaryModel;
 
     constructor(userIdModel: FrontUserIdModel,
-        bookIdModel: GoogleBooksApiBooksDeitalBookIdModel,
+        bookIdModel: BookIdModel,
         summaryModel: SummaryModel) {
 
         this._frontUserIdModel = userIdModel;
@@ -29,7 +29,7 @@ export class UpdateBookshelfSummaryEntity {
     }
 
     get bookId() {
-        return this._bookIdModel.id;
+        return this._bookIdModel.bookId;
     }
 
     get summary() {

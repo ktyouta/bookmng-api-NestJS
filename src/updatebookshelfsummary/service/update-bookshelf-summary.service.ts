@@ -13,6 +13,7 @@ import { UpdateBookshelfSummaryRepository } from '../repository/update-bookshelf
 import { FrontUserIdModel } from 'src/internal/common/FrontUserIdModel';
 import { UpdateBookshelfSummaryEntity } from '../entity/update-bookshelf-summary.entity';
 import { SummaryModel } from '../model/summary.model';
+import { BookIdModel } from 'src/internal/bookshelftransaction/BookIdModel';
 
 @Injectable()
 export class UpdateBookshelfSummaryService {
@@ -38,7 +39,7 @@ export class UpdateBookshelfSummaryService {
      * @param summaryModel 
      */
     async updateSummary(userIdModel: FrontUserIdModel,
-        bookIdModel: GoogleBooksApiBooksDeitalBookIdModel,
+        bookIdModel: BookIdModel,
         summaryModel: SummaryModel) {
 
         const updateBookshelfSummaryEntity = new UpdateBookshelfSummaryEntity(

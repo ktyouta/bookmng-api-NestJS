@@ -10,6 +10,7 @@ import { JsonWebTokenUserModel } from "src/jsonwebtoken/model/JsonWebTokenUserMo
 import { Request } from 'express';
 import { UpdateBookshelfSummaryRequestDto } from "../dto/update-bookshelf-summary-request.dto";
 import { SummaryModel } from "../model/summary.model";
+import { BookIdModel } from "src/internal/bookshelftransaction/BookIdModel";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -19,8 +20,8 @@ export class UpdateBookshelfSummaryController {
 
     @UseGuards(CookieCheckGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    @Put(ApiEndopoint.BOOKSHELF_SUMMARY_ID)
-    async execute(@Param('id') id: string,
+    @Put(ApiEndopoint.BOOKSHELF_SUMMARY)
+    async execute(@Param('bookId') bookId: string,
         @Body() requestDto: UpdateBookshelfSummaryRequestDto,
         @Req() req: Request,) {
 
@@ -28,7 +29,7 @@ export class UpdateBookshelfSummaryController {
         const jsonWebTokenUserModel = await JsonWebTokenUserModel.get(req);
         const userIdModel = jsonWebTokenUserModel.frontUserIdModel;
 
-        const bookIdModel = new GoogleBooksApiBooksDeitalBookIdModel(id);
+        const bookIdModel = new BookIdModel(bookId);
         const summaryModel = new SummaryModel(requestDto);
 
         // 要約を更新
