@@ -11,16 +11,19 @@ import { UpdateBookshelfReviewService } from "../service/update-bookshelf-review
 import { UpdateBookshelfReviewRequestDto } from "../dto/update-bookshelf-review-request.dto";
 import { ReviewModel } from "../model/review.model";
 import { BookIdModel } from "src/internal/bookshelftransaction/BookIdModel";
+import { TypeOrmTransaction } from "src/common/db/TypeOrmTransaction";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
 export class UpdateBookshelfReviewController {
 
+    private static readonly ENDPOINT = ApiEndopoint.BOOKSHELF_REVIEW;
+
     constructor(private readonly pdateBookshelfReviewService: UpdateBookshelfReviewService,) { }
 
     @UseGuards(CookieCheckGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    @Put(ApiEndopoint.BOOKSHELF_REVIEW)
+    @Put(UpdateBookshelfReviewController.ENDPOINT)
     async execute(@Param('bookId') bookId: string,
         @Body() requestDto: UpdateBookshelfReviewRequestDto,
         @Req() req: Request,) {
@@ -32,23 +35,39 @@ export class UpdateBookshelfReviewController {
         const bookIdModel = new BookIdModel(bookId);
         const reviewModel = new ReviewModel(requestDto);
 
-        // レビューを更新
-        const result = await this.pdateBookshelfReviewService.updateReview(
-            userIdModel,
-            bookIdModel,
-            reviewModel,
-        );
+        const tx = new TypeOrmTransaction();
 
-        const updateCount = result.affected;
+        try {
 
-        if (!updateCount || updateCount === 0) {
-            throw Error(`レビューの更新に失敗しました。`);
+            // トランザクション開始
+            await tx.start();
+
+            // レビューを更新
+            const result = await this.pdateBookshelfReviewService.updateReview(
+                userIdModel,
+                bookIdModel,
+                reviewModel,
+            );
+
+            const updateCount = result.affected;
+
+            if (!updateCount || updateCount === 0) {
+                throw Error(`レビューの更新に失敗しました。`);
+            }
+
+            return ApiResponse.create(
+                HttpStatus.HTTP_STATUS_OK,
+                `レビューの更新に成功しました`,
+                reviewModel.review
+            );
+
+        } catch (e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw Error(`レビュー更新中にエラーが発生しました。ENDPOINT:${UpdateBookshelfReviewController.ENDPOINT} MTTHOD:PUT ERROR:${e}`);
+        } finally {
+            tx.release();
         }
-
-        return ApiResponse.create(
-            HttpStatus.HTTP_STATUS_OK,
-            `レビューの更新に成功しました`,
-            reviewModel.review
-        );
     }
 }
