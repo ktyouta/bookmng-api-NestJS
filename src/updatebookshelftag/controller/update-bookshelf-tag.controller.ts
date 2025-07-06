@@ -52,6 +52,8 @@ export class UpdateBookshelfTagController {
                 throw Error(`書籍情報が存在しません。`);
             }
 
+            // タグマスタに登録
+
             // タグを削除
             const delResult = await this.updateBookshelfTagService.deleteTag(
                 userIdModel,
@@ -72,6 +74,8 @@ export class UpdateBookshelfTagController {
             if (!updResult) {
                 throw Error(`タグの更新に失敗しました。`);
             }
+
+            // タグ情報を取得
 
             // コミット
             await tx.commit();

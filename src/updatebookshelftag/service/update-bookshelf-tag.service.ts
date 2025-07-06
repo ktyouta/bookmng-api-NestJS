@@ -18,6 +18,7 @@ import { BookIdModel } from 'src/internal/bookshelftransaction/BookIdModel';
 import { TagIdModel } from '../model/tag-id.model';
 import { UpdateBookshelfTagDeleteEntity } from '../entity/update-bookshelf-tag-delete.entity';
 import { TagListType } from '../type/tag-list.type';
+import { UpdateBookshelfTagTagMasterInsertEntity } from '../entity/update-bookshelf-tag-tag-master-insert.entity';
 
 
 @Injectable()
@@ -66,7 +67,7 @@ export class UpdateBookshelfTagService {
                 },
             );
 
-            const result = await this.updateBookshelfTagRepository.updateTag(updateBookshelfTagInsertEntity);
+            const result = await this.updateBookshelfTagRepository.insertBookshelfTag(updateBookshelfTagInsertEntity);
 
             return result;
         }));
@@ -90,5 +91,31 @@ export class UpdateBookshelfTagService {
         const result = await this.updateBookshelfTagRepository.deleteTag(updateBookshelfTagDeleteEntity);
 
         return result;
+    }
+
+
+    /**
+     * タグマスタに登録
+     * @param userIdModel 
+     * @param updateBookshelfTagRequestModel 
+     */
+    async insertTagMaster(userIdModel: FrontUserIdModel,
+        updateBookshelfTagRequestModel: UpdateBookshelfTagRequestModel) {
+
+        const tagList = updateBookshelfTagRequestModel.tagList;
+
+        for (const tag of tagList) {
+
+            if (tag.tagId.tagId) {
+                continue;
+            }
+
+            const updateBookshelfTagTagMasterInsertEntity = new UpdateBookshelfTagTagMasterInsertEntity(
+                userIdModel,
+                tag
+            );
+
+            const result = await this.updateBookshelfTagRepository.insertTagMaster(updateBookshelfTagTagMasterInsertEntity);
+        }
     }
 }

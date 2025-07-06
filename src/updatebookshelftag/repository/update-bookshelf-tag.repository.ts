@@ -10,6 +10,8 @@ import { UpdateBookshelfTagSelectBookshelfEntity } from "../entity/update-booksh
 import { BookshelfTagTransaction } from "src/entities/BookshelfTagTransaction";
 import { UpdateBookshelfTagDeleteEntity } from "../entity/update-bookshelf-tag-delete.entity";
 import { UpdateBookshelfTagInsertEntity } from "../entity/update-bookshelf-tag-insert.entity";
+import { UpdateBookshelfTagTagMasterInsertEntity } from "../entity/update-bookshelf-tag-tag-master-insert.entity";
+import { TagMaster } from "src/entities/TagMaster";
 
 
 @Injectable()
@@ -21,6 +23,8 @@ export class UpdateBookshelfTagRepository {
         private readonly bookshelfTransactionRepository: Repository<BookshelfTransaction>,
         @InjectRepository(BookshelfTagTransaction)
         private readonly bookshelfTagTransactionRepository: Repository<BookshelfTagTransaction>,
+        @InjectRepository(TagMaster)
+        private readonly tagMasterRepository: Repository<TagMaster>,
     ) { }
 
     /**
@@ -45,20 +49,25 @@ export class UpdateBookshelfTagRepository {
     }
 
     /**
-     * タグを登録
+     * 本棚タグを登録
      * @param getBookshelfListSelectBookshelfEntity 
      * @returns 
      */
-    async updateTag(updateBookshelfTagInsertEntity: UpdateBookshelfTagInsertEntity) {
+    async insertBookshelfTag(updateBookshelfTagInsertEntity: UpdateBookshelfTagInsertEntity) {
 
         const userId = updateBookshelfTagInsertEntity.frontUserId;
         const bookId = updateBookshelfTagInsertEntity.bookId;
+        const tag = updateBookshelfTagInsertEntity.tag;
 
-        // タグを更新
+        // タグを登録
         const result = await this.bookshelfTagTransactionRepository.insert(
             {
                 userId,
                 bookId,
+                tagId: tag.tagId.tagId,
+                deleteFlg: DeleteFlgModel.OFF,
+                createDate: new Date(),
+                updateDate: new Date(),
             },
         );
 
@@ -81,6 +90,32 @@ export class UpdateBookshelfTagRepository {
                 userId,
                 bookId,
             }
+        );
+
+        return result;
+    }
+
+
+    /**
+     * タグマスタに登録
+     * @param getBookshelfListSelectBookshelfEntity 
+     * @returns 
+     */
+    async insertTagMaster(updateBookshelfTagTagMasterInsertEntity: UpdateBookshelfTagTagMasterInsertEntity) {
+
+        const userId = updateBookshelfTagTagMasterInsertEntity.frontUserId;
+        const tag = updateBookshelfTagTagMasterInsertEntity.tag;
+
+        // タグを登録
+        const result = await this.tagMasterRepository.insert(
+            {
+                userId,
+                tagId: tag.tagId.tagId,
+                tagName: tag.tagName.tagName,
+                deleteFlg: DeleteFlgModel.OFF,
+                createDate: new Date(),
+                updateDate: new Date(),
+            },
         );
 
         return result;
