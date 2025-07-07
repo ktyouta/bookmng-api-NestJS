@@ -32,6 +32,7 @@ import { GetBookshelfMemoModule } from './getbookshelfmemo/module/get-bookshelf-
 import { GetBookshelfSortListModule } from './getbookshelfsortlist/module/get-bookshelf-sort-list.module';
 import { GetTagListModule } from './gettaglist/module/get-tag-list.module';
 import { GetBookshelfTagModule } from './getbookshelftag/module/get-bookshelf-tag.module';
+import { UpdateBookshelfTagModule } from './updatebookshelftag/module/update-bookshelf-tag.module';
 
 
 dotenv.config();
@@ -83,6 +84,8 @@ dotenv.config();
     GetTagListModule,
     // 本棚タグ取得
     GetBookshelfTagModule,
+    // 本棚タグ更新
+    UpdateBookshelfTagModule,
   ],
   controllers: [
     AppController,

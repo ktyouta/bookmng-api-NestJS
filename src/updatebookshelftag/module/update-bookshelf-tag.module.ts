@@ -5,6 +5,7 @@ import { BookshelfTransaction } from "src/entities/BookshelfTransaction";
 import { BookshelfTagTransaction } from "src/entities/BookshelfTagTransaction";
 import { UpdateBookshelfTagService } from "../service/update-bookshelf-tag.service";
 import { UpdateBookshelfTagRepository } from "../repository/update-bookshelf-tag.repository";
+import { TagMaster } from "src/entities/TagMaster";
 
 
 @Module({
@@ -16,7 +17,8 @@ import { UpdateBookshelfTagRepository } from "../repository/update-bookshelf-tag
     imports: [
         TypeOrmModule.forFeature([
             BookshelfTransaction,
-            BookshelfTagTransaction
+            BookshelfTagTransaction,
+            TagMaster,
         ]),
     ],
 })

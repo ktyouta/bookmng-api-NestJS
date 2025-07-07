@@ -13,6 +13,7 @@ import { UpdateBookshelfTagService } from "../service/update-bookshelf-tag.servi
 import { UpdateBookshelfTagRequestDto } from "../dto/update-bookshelf-tag-request.dto";
 import { TagIdModel } from "../model/tag-id.model";
 import { UpdateBookshelfTagRequestModel } from "../model/update-bookshelf-tag.request.model";
+import { TagListType } from "../type/tag-list.type";
 
 
 @Controller(BOOKMNG_ENDPOINT_PATH)
@@ -53,6 +54,10 @@ export class UpdateBookshelfTagController {
             }
 
             // タグマスタに登録
+            const newTagList: TagListType[] = await this.updateBookshelfTagService.insertTagMaster(
+                userIdModel,
+                updateBookshelfTagRequestModel
+            );
 
             // タグを削除
             const delResult = await this.updateBookshelfTagService.deleteTag(
@@ -68,14 +73,18 @@ export class UpdateBookshelfTagController {
             const updResult = await this.updateBookshelfTagService.insertTag(
                 userIdModel,
                 bookIdModel,
-                updateBookshelfTagRequestModel,
+                newTagList,
             );
 
             if (!updResult) {
                 throw Error(`タグの更新に失敗しました。`);
             }
 
-            // タグ情報を取得
+            // レスポンス用のタグ情報を取得
+            const bookshelfTagList = await this.updateBookshelfTagService.getResponseTagList(
+                userIdModel,
+                bookIdModel,
+            );
 
             // コミット
             await tx.commit();
@@ -83,7 +92,7 @@ export class UpdateBookshelfTagController {
             return ApiResponse.create(
                 HttpStatus.HTTP_STATUS_OK,
                 `タグの更新に成功しました`,
-                updResult,
+                bookshelfTagList,
             );
 
         } catch (e) {

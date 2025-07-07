@@ -7,27 +7,37 @@ import { FrontUserSaltValueModel } from "src/internal/frontuserloginmaster/Front
 import { UpdateBookshelfTagRequestDto } from "../dto/update-bookshelf-tag-request.dto";
 import { TagIdModel } from "../model/tag-id.model";
 import { TagListType } from "../type/tag-list.type";
+import { TagNameModel } from "../model/tag-name.model";
+import { TagSeqModel } from "../model/tag-seq.model";
 
 export class UpdateBookshelfTagTagMasterInsertEntity {
 
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
     // タグ
-    private readonly _tag: TagListType
+    private readonly _tagNameModel: TagNameModel
+    // タグシーケンス
+    private readonly _tagSeqModel: TagSeqModel
 
     constructor(frontUserIdModel: FrontUserIdModel,
-        tag: TagListType
+        tagNameModel: TagNameModel,
+        tagSeqModel: TagSeqModel
     ) {
 
         this._frontUserIdModel = frontUserIdModel;
-        this._tag = tag;
+        this._tagNameModel = tagNameModel;
+        this._tagSeqModel = tagSeqModel;
     }
 
     get frontUserId() {
         return this._frontUserIdModel.frontUserId;
     }
 
-    get tag() {
-        return this._tag;
+    get tagName() {
+        return this._tagNameModel.tagName;
+    }
+
+    get tagSeq() {
+        return this._tagSeqModel.tagSeq;
     }
 }

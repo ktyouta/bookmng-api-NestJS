@@ -2,7 +2,7 @@ import { TypeOrmRepository } from "src/common/db/TypeOrmRepository";
 import { FrontUserLoginMaster } from "src/entities/FrontUserLoginMaster";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { DeleteFlgModel } from "src/internal/common/DeleteFlgModel";
 import { BookshelfTransaction } from "src/entities/BookshelfTransaction";
 import { CreateBookshelfSelectBookshelfEntity } from "src/createbookshelf/entity/create-bookshelf-select-bookshelf.entity";
@@ -12,6 +12,8 @@ import { UpdateBookshelfTagDeleteEntity } from "../entity/update-bookshelf-tag-d
 import { UpdateBookshelfTagInsertEntity } from "../entity/update-bookshelf-tag-insert.entity";
 import { UpdateBookshelfTagTagMasterInsertEntity } from "../entity/update-bookshelf-tag-tag-master-insert.entity";
 import { TagMaster } from "src/entities/TagMaster";
+import { UpdateBookshelfTagSelectTagSequenceEntity } from "../entity/update-bookshelf-tag-select-tag-sequence.entity";
+import { UpdateBookshelfTagSelectBookshelfTagEntity } from "../entity/update-bookshelf-tag-select-bookshelf-tag.entity";
 
 
 @Injectable()
@@ -25,6 +27,7 @@ export class UpdateBookshelfTagRepository {
         private readonly bookshelfTagTransactionRepository: Repository<BookshelfTagTransaction>,
         @InjectRepository(TagMaster)
         private readonly tagMasterRepository: Repository<TagMaster>,
+        private readonly entityManager: EntityManager,
     ) { }
 
     /**
@@ -104,14 +107,15 @@ export class UpdateBookshelfTagRepository {
     async insertTagMaster(updateBookshelfTagTagMasterInsertEntity: UpdateBookshelfTagTagMasterInsertEntity) {
 
         const userId = updateBookshelfTagTagMasterInsertEntity.frontUserId;
-        const tag = updateBookshelfTagTagMasterInsertEntity.tag;
+        const tagName = updateBookshelfTagTagMasterInsertEntity.tagName;
+        const tagId = updateBookshelfTagTagMasterInsertEntity.tagSeq;
 
         // タグを登録
-        const result = await this.tagMasterRepository.insert(
+        const result = await this.tagMasterRepository.save(
             {
                 userId,
-                tagId: tag.tagId.tagId,
-                tagName: tag.tagName.tagName,
+                tagId: tagId,
+                tagName: tagName,
                 deleteFlg: DeleteFlgModel.OFF,
                 createDate: new Date(),
                 updateDate: new Date(),
@@ -119,5 +123,57 @@ export class UpdateBookshelfTagRepository {
         );
 
         return result;
+    }
+
+    /**
+     * タグマスタのシーケンス取得
+     * @param getBookshelfListSelectBookshelfEntity 
+     * @returns 
+     */
+    async getTagSeq(updateBookshelfTagSelectTagSequenceEntity: UpdateBookshelfTagSelectTagSequenceEntity) {
+
+        const params: unknown[] = [
+            updateBookshelfTagSelectTagSequenceEntity.frontUserId,
+        ];
+
+        let query = `
+            SELECT 
+                COALESCE(MAX(seq),0) + 1 as next_seq
+            FROM 
+                bookmng.tag_master  
+            WHERE
+                user_id = $1
+        `;
+
+        // シーケンスを取得
+        const result = await this.entityManager.query(
+            query,
+            params
+        );
+
+        const nextSeq: number = result[0].next_seq;
+
+        return nextSeq;
+    }
+
+    /**
+     * レスポンス用のタグ情報を取得
+     * @param updateBookshelfTagSelectBookshelfTagEntity 
+     * @returns 
+     */
+    async getResponseTagList(updateBookshelfTagSelectBookshelfTagEntity: UpdateBookshelfTagSelectBookshelfTagEntity) {
+
+        const userId = updateBookshelfTagSelectBookshelfTagEntity.frontUserId;
+        const bookId = updateBookshelfTagSelectBookshelfTagEntity.bookId;
+
+        // 本棚タグ情報を取得
+        const bookshelfTagList = await this.bookshelfTagTransactionRepository.find({
+            where: {
+                userId,
+                bookId
+            },
+        });
+
+        return bookshelfTagList;
     }
 }

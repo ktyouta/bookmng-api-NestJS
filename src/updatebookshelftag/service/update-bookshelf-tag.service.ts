@@ -19,6 +19,10 @@ import { TagIdModel } from '../model/tag-id.model';
 import { UpdateBookshelfTagDeleteEntity } from '../entity/update-bookshelf-tag-delete.entity';
 import { TagListType } from '../type/tag-list.type';
 import { UpdateBookshelfTagTagMasterInsertEntity } from '../entity/update-bookshelf-tag-tag-master-insert.entity';
+import { UpdateBookshelfTagSelectTagSequenceEntity } from '../entity/update-bookshelf-tag-select-tag-sequence.entity';
+import { TagSeqModel } from '../model/tag-seq.model';
+import { TagNameModel } from '../model/tag-name.model';
+import { UpdateBookshelfTagSelectBookshelfTagEntity } from '../entity/update-bookshelf-tag-select-bookshelf-tag.entity';
 
 
 @Injectable()
@@ -53,10 +57,10 @@ export class UpdateBookshelfTagService {
      */
     async insertTag(userIdModel: FrontUserIdModel,
         bookIdModel: BookIdModel,
-        updateBookshelfTagRequestModel: UpdateBookshelfTagRequestModel) {
+        newTagList: TagListType[]) {
 
 
-        const result = await Promise.all(updateBookshelfTagRequestModel.tagList.map(async (e: TagListType) => {
+        const result = await Promise.all(newTagList.map(async (e: TagListType) => {
 
             const updateBookshelfTagInsertEntity = new UpdateBookshelfTagInsertEntity(
                 userIdModel,
@@ -103,19 +107,58 @@ export class UpdateBookshelfTagService {
         updateBookshelfTagRequestModel: UpdateBookshelfTagRequestModel) {
 
         const tagList = updateBookshelfTagRequestModel.tagList;
+        const updateBookshelfTagSelectTagSequenceEntity = new UpdateBookshelfTagSelectTagSequenceEntity(userIdModel);
+        const newTagList: TagListType[] = [];
 
         for (const tag of tagList) {
 
             if (tag.tagId.tagId) {
+
+                newTagList.push({
+                    tagId: tag.tagId,
+                    tagName: tag.tagName,
+                });
                 continue;
             }
 
+            // シーケンス番号取得
+            const nextSeq = await this.updateBookshelfTagRepository.getTagSeq(updateBookshelfTagSelectTagSequenceEntity);
+
+            // タグマスタ登録
             const updateBookshelfTagTagMasterInsertEntity = new UpdateBookshelfTagTagMasterInsertEntity(
                 userIdModel,
-                tag
+                tag.tagName,
+                new TagSeqModel(nextSeq)
             );
 
             const result = await this.updateBookshelfTagRepository.insertTagMaster(updateBookshelfTagTagMasterInsertEntity);
+
+            newTagList.push({
+                tagId: new TagIdModel(result.tagId.toString()),
+                tagName: new TagNameModel(result.tagName)
+            });
         }
+
+        return newTagList;
+    }
+
+    /**
+     * レスポンス用のタグリストを取得
+     * @param userIdModel 
+     * @param bookIdModel 
+     * @returns 
+     */
+    async getResponseTagList(userIdModel: FrontUserIdModel,
+        bookIdModel: BookIdModel,
+    ) {
+
+        const updateBookshelfTagSelectBookshelfTagEntity = new UpdateBookshelfTagSelectBookshelfTagEntity(
+            userIdModel,
+            bookIdModel
+        );
+
+        const bookshelfTagList = await this.updateBookshelfTagRepository.getResponseTagList(updateBookshelfTagSelectBookshelfTagEntity);
+
+        return bookshelfTagList;
     }
 }
