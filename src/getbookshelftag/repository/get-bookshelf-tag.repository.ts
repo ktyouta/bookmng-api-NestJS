@@ -2,7 +2,7 @@ import { TypeOrmRepository } from "src/common/db/TypeOrmRepository";
 import { FrontUserLoginMaster } from "src/entities/FrontUserLoginMaster";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { DeleteFlgModel } from "src/internal/common/DeleteFlgModel";
 import { BookshelfTransaction } from "src/entities/BookshelfTransaction";
 import { CreateBookshelfSelectBookshelfEntity } from "src/createbookshelf/entity/create-bookshelf-select-bookshelf.entity";
@@ -10,6 +10,7 @@ import { GetBookshelfTagEntity } from "../entity/get-bookshelf-tag.entity";
 import { GetBookshelfTagSelectBookshelfEntity } from "../entity/get-bookshelf-tag-select-bookshelf.entity";
 import { BookshelfTagTransaction } from "src/entities/BookshelfTagTransaction";
 import { FLG } from "src/common/const/CommonConst";
+import { ResponseTagType } from "../type/response-tag.type";
 
 
 @Injectable()
@@ -19,8 +20,7 @@ export class GetBookshelfTagRepository {
     constructor(
         @InjectRepository(BookshelfTransaction)
         private readonly bookshelfTransactionRepository: Repository<BookshelfTransaction>,
-        @InjectRepository(BookshelfTagTransaction)
-        private readonly bookshelfTagTransactionRepository: Repository<BookshelfTagTransaction>,
+        private readonly entityManager: EntityManager,
     ) { }
 
     /**
@@ -54,15 +54,32 @@ export class GetBookshelfTagRepository {
         const userId = getBookshelfTagEntity.frontUserId;
         const bookId = getBookshelfTagEntity.bookId;
 
-        // タグを取得
-        const result = await this.bookshelfTagTransactionRepository.find({
-            where: {
-                userId,
-                bookId,
-                deleteFlg: FLG.OFF
-            }
-        });
+        const params: unknown[] = [
+            userId,
+            bookId,
+        ];
 
-        return result;
+        const query = `
+            SELECT 
+                a.tag_id as "tagId",
+                b.tag_name as "tagName"
+            FROM 
+                bookmng.bookshelf_tag_transaction  a
+            INNER JOIN
+                bookmng.tag_master b
+            ON
+                a.tag_id = b.tag_id
+            WHERE
+                a.user_id = $1 and
+                a.book_id = $2
+        `;
+
+        // 本棚タグ情報を取得
+        const bookshelfTagList: ResponseTagType[] = await this.entityManager.query(
+            query,
+            params
+        );
+
+        return bookshelfTagList;
     }
 }
