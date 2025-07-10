@@ -1,8 +1,12 @@
 export class TagIdModel {
 
-    private readonly _tagId: number;
+    private readonly _tagId: string;
 
     constructor(strTagId: string) {
+
+        if (!strTagId) {
+            return;
+        }
 
         const tagId = Number.parseInt(strTagId);
 
@@ -10,7 +14,7 @@ export class TagIdModel {
             throw Error(`タグIDの形式が不正です。tagId:${strTagId}`);
         }
 
-        this._tagId = tagId;
+        this._tagId = strTagId;
     }
 
     get tagId() {

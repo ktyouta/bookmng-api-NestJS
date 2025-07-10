@@ -14,6 +14,7 @@ import { UpdateBookshelfTagTagMasterInsertEntity } from "../entity/update-booksh
 import { TagMaster } from "src/entities/TagMaster";
 import { UpdateBookshelfTagSelectTagSequenceEntity } from "../entity/update-bookshelf-tag-select-tag-sequence.entity";
 import { UpdateBookshelfTagSelectBookshelfTagEntity } from "../entity/update-bookshelf-tag-select-bookshelf-tag.entity";
+import { ResponseTagType } from "../type/response-tag.type";
 
 
 @Injectable()
@@ -67,7 +68,7 @@ export class UpdateBookshelfTagRepository {
             {
                 userId,
                 bookId,
-                tagId: tag.tagId.tagId,
+                tagId: Number.parseInt(tag.tagId.tagId),
                 deleteFlg: DeleteFlgModel.OFF,
                 createDate: new Date(),
                 updateDate: new Date(),
@@ -138,7 +139,7 @@ export class UpdateBookshelfTagRepository {
 
         let query = `
             SELECT 
-                COALESCE(MAX(seq),0) + 1 as next_seq
+                COALESCE(MAX(tag_id),0) + 1 as next_seq
             FROM 
                 bookmng.tag_master  
             WHERE
@@ -166,13 +167,31 @@ export class UpdateBookshelfTagRepository {
         const userId = updateBookshelfTagSelectBookshelfTagEntity.frontUserId;
         const bookId = updateBookshelfTagSelectBookshelfTagEntity.bookId;
 
+        const params: unknown[] = [
+            userId,
+            bookId,
+        ];
+
+        const query = `
+            SELECT 
+                a.tag_id as "tagId",
+                b.tag_name as "tagName"
+            FROM 
+                bookmng.bookshelf_tag_transaction  a
+            INNER JOIN
+                bookmng.tag_master b
+            ON
+                a.tag_id = b.tag_id
+            WHERE
+                a.user_id = $1 and
+                a.book_id = $2
+        `;
+
         // 本棚タグ情報を取得
-        const bookshelfTagList = await this.bookshelfTagTransactionRepository.find({
-            where: {
-                userId,
-                bookId
-            },
-        });
+        const bookshelfTagList: ResponseTagType[] = await this.entityManager.query(
+            query,
+            params
+        );
 
         return bookshelfTagList;
     }

@@ -1,7 +1,8 @@
-import { IsInt, IsString } from "class-validator";
+import { IsInt, IsOptional, IsString } from "class-validator";
 
 export class UpdateBookshelfTagReqeustTagDto {
 
+    @IsOptional()
     @IsString()
     tagId: string;
 
