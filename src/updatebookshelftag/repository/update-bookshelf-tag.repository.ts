@@ -15,6 +15,7 @@ import { TagMaster } from "src/entities/TagMaster";
 import { UpdateBookshelfTagSelectTagSequenceEntity } from "../entity/update-bookshelf-tag-select-tag-sequence.entity";
 import { UpdateBookshelfTagSelectBookshelfTagEntity } from "../entity/update-bookshelf-tag-select-bookshelf-tag.entity";
 import { ResponseTagType } from "../type/response-tag.type";
+import { UpdateBookshelfTagDeleteTagMasterEntity } from "../entity/update-bookshelf-tag-delete-tag-master.entity";
 
 
 @Injectable()
@@ -194,5 +195,41 @@ export class UpdateBookshelfTagRepository {
         );
 
         return bookshelfTagList;
+    }
+
+    /**
+     * 未使用のタグをマスタから削除
+     * @param updateBookshelfTagDeleteTagMasterEntity 
+     * @returns 
+     */
+    async deleteNoUsedTag(updateBookshelfTagDeleteTagMasterEntity: UpdateBookshelfTagDeleteTagMasterEntity) {
+
+        const userId = updateBookshelfTagDeleteTagMasterEntity.frontUserId;
+
+        const params: unknown[] = [
+            userId,
+        ];
+
+        const query = `
+            DELETE
+            FROM
+                bookmng.tag_master a
+            WHERE
+                a.user_id = $1 AND
+                NOT EXISTS(
+                    SELECT
+                        *
+                    FROM
+                        bookmng.bookshelf_tag_transaction b
+                    WHERE
+                        b.user_id = $1 AND
+                        b.tag_id = a.tag_id
+                )
+        `;
+
+        await this.entityManager.query(
+            query,
+            params
+        );
     }
 }

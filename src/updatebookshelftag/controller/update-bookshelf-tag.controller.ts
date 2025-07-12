@@ -69,7 +69,7 @@ export class UpdateBookshelfTagController {
                 throw Error(`タグの削除に失敗しました。`);
             }
 
-            // タグを登録
+            // 本棚タグを登録
             const updResult = await this.updateBookshelfTagService.insertTag(
                 userIdModel,
                 bookIdModel,
@@ -79,6 +79,9 @@ export class UpdateBookshelfTagController {
             if (!updResult) {
                 throw Error(`タグの更新に失敗しました。`);
             }
+
+            // 未使用のタグをマスタから削除
+            await this.updateBookshelfTagService.deleteNoUsedTag(userIdModel);
 
             // レスポンス用のタグ情報を取得
             const bookshelfTagList = await this.updateBookshelfTagService.getResponseTagList(

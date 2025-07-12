@@ -23,6 +23,7 @@ import { UpdateBookshelfTagSelectTagSequenceEntity } from '../entity/update-book
 import { TagSeqModel } from '../model/tag-seq.model';
 import { TagNameModel } from '../model/tag-name.model';
 import { UpdateBookshelfTagSelectBookshelfTagEntity } from '../entity/update-bookshelf-tag-select-bookshelf-tag.entity';
+import { UpdateBookshelfTagDeleteTagMasterEntity } from '../entity/update-bookshelf-tag-delete-tag-master.entity';
 
 
 @Injectable()
@@ -160,5 +161,20 @@ export class UpdateBookshelfTagService {
         const bookshelfTagList = await this.updateBookshelfTagRepository.getResponseTagList(updateBookshelfTagSelectBookshelfTagEntity);
 
         return bookshelfTagList;
+    }
+
+    /**
+     * 未使用のタグをマスタから削除
+     * @param userIdModel 
+     * @param bookIdModel 
+     * @returns 
+     */
+    async deleteNoUsedTag(userIdModel: FrontUserIdModel,) {
+
+        const updateBookshelfTagDeleteTagMasterEntity = new UpdateBookshelfTagDeleteTagMasterEntity(
+            userIdModel,
+        );
+
+        await this.updateBookshelfTagRepository.deleteNoUsedTag(updateBookshelfTagDeleteTagMasterEntity);
     }
 }
