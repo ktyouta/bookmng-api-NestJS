@@ -16,6 +16,7 @@ import { UpdateBookshelfTagSelectTagSequenceEntity } from "../entity/update-book
 import { UpdateBookshelfTagSelectBookshelfTagEntity } from "../entity/update-bookshelf-tag-select-bookshelf-tag.entity";
 import { ResponseTagType } from "../type/response-tag.type";
 import { UpdateBookshelfTagDeleteTagMasterEntity } from "../entity/update-bookshelf-tag-delete-tag-master.entity";
+import { UpdateBookshelfTagSelectTagMasterEntity } from "../entity/update-bookshelf-tag-select-tag-master.entity";
 
 
 @Injectable()
@@ -231,5 +232,26 @@ export class UpdateBookshelfTagRepository {
             query,
             params
         );
+    }
+
+    /**
+     * タグマスタ情報を取得
+     * @param updateBookshelfTagSelectTagMasterEntity 
+     * @returns 
+     */
+    async getTagMaster(updateBookshelfTagSelectTagMasterEntity: UpdateBookshelfTagSelectTagMasterEntity) {
+
+        const userId = updateBookshelfTagSelectTagMasterEntity.frontUserId;
+        const tagName = updateBookshelfTagSelectTagMasterEntity.tagName;
+
+        // タグマスタ情報を取得
+        const tagMasterList = await this.tagMasterRepository.find({
+            where: {
+                userId,
+                tagName
+            },
+        });
+
+        return tagMasterList;
     }
 }

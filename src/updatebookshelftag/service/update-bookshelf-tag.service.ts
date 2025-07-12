@@ -24,6 +24,7 @@ import { TagSeqModel } from '../model/tag-seq.model';
 import { TagNameModel } from '../model/tag-name.model';
 import { UpdateBookshelfTagSelectBookshelfTagEntity } from '../entity/update-bookshelf-tag-select-bookshelf-tag.entity';
 import { UpdateBookshelfTagDeleteTagMasterEntity } from '../entity/update-bookshelf-tag-delete-tag-master.entity';
+import { UpdateBookshelfTagSelectTagMasterEntity } from '../entity/update-bookshelf-tag-select-tag-master.entity';
 
 
 @Injectable()
@@ -119,6 +120,19 @@ export class UpdateBookshelfTagService {
                     tagId: tag.tagId,
                     tagName: tag.tagName,
                 });
+                continue;
+            }
+
+            // タグマスタ取得
+            const updateBookshelfTagSelectTagMasterEntity = new UpdateBookshelfTagSelectTagMasterEntity(
+                userIdModel,
+                tag.tagName
+            );
+
+            const tagMasterList = await this.updateBookshelfTagRepository.getTagMaster(updateBookshelfTagSelectTagMasterEntity);
+
+            // タグマスタに登録済み
+            if (tagMasterList && tagMasterList.length > 0) {
                 continue;
             }
 
