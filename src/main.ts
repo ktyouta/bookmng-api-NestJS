@@ -27,6 +27,15 @@ async function bootstrap() {
   // エラーハンドリング
   app.useGlobalFilters(new GlobalException());
 
+  // エラーハンドリング
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+  });
+
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+  });
+
   await app.listen(ENV.PORT);
 }
 bootstrap();
